@@ -1,9 +1,57 @@
-[
+[  
+  {
+    "id": 25021800,
+    "uniqueId": 25021800,
+    "name": "teleportable.js",
+    "type": "script"
+  },
+  {
+    "id": 25021799,
+    "uniqueId": 25021799,
+    "name": "movement.js",
+    "type": "script"
+  },
+  {
+    "id": 25021798,
+    "uniqueId": 25021798,
+    "name": "follow.js",
+    "type": "script"
+  },
+  {
+    "id": 25021801,
+    "uniqueId": 25021801,
+    "name": "teleport.js",
+    "type": "script"
+  },
+  {
+    "id": 25021793,
+    "uniqueId": 25021793,
+    "name": "platform",
+    "type": "texture"
+  },
+  {
+    "id": 25021787,
+    "uniqueId": 25021787,
+    "name": "platform",
+    "type": "material"
+  },
   {
     "id": 25021792,
     "uniqueId": 25021792,
     "name": "plain",
     "type": "model"
+  },
+  {
+    "id": 25021791,
+    "uniqueId": 25021791,
+    "name": "Sphere",
+    "type": "texture"
+  },
+  {
+    "id": 25021783,
+    "uniqueId": 25021783,
+    "name": "ball",
+    "type": "material"
   },
   {
     "id": 25021785,

@@ -108,15 +108,10 @@
         app.assets.loadFromUrl(url, "model", function (err, asset) {
             // Create a new Entity
             entity = new pc.Entity();
+            var model = asset.resources[0];
+ 
 
-            // Add a model component, with the new asset
-            var modelComponent = entity.addComponent("model", {
-                type: "asset",
-                asset: asset
-            });
-            app.root.addChild(entity);
-
-            var model = modelComponent.model;
+ 
 
             var gd = app.graphicsDevice;
 
@@ -143,6 +138,15 @@
             model.meshInstances.forEach(function (meshInstance) {
                 meshInstance.material = material;
             })
+
+
+            // Add a model component, with the new asset
+            var modelComponent = entity.addComponent("model", {
+                type: "asset",
+                asset: asset
+            });
+            
+            app.root.addChild(entity);
 
             app.on("update", function (dt) {
                 material.setParameter('uTexture', diffuseMap);

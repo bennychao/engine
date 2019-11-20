@@ -37,29 +37,42 @@ var entity, light, camera;
 
 //pc.SceneMgr.loadAsset(null);
 // });
-pc.SceneMgr.load("scene1", function(){
 
-    var e = prefabs.Car.createEntity(app.root);
-});
+pc.SceneMgr.load("scene1", function(){});
 
+    //25021783
+    var url = "./assets/models/ball.json";
+
+    app.assets.loadFromUrl(url, "model",function(err, asset){
+
+        asset.id = 2502178115;
+       
+    });
+
+    url = "./assets/models/plain.json";
+
+    app.assets.loadFromUrl(url, "model",function(){});
 // app.assets.loadFromUrl(url, "model", function (err, asset) {
-//     entity = new pc.Entity();
-//     //asset.id = 1001;
-//     entity.addComponent("model", {
-//         type: "asset",
-//         asset: asset,
-//         castShadows: true
-//     });
-//     app.root.addChild(entity);
+//     //  entity = new pc.Entity();
+//     //  var asset = app.assets.find("ball", "model");
+//     // // //asset.id = 1001;
+//     // entity.setLocalPosition(0, 0, 0.1);
+//     // entity.addComponent("model", {
+//     //     type: "asset",
+//     //     asset: asset,
+//     //     castShadows: true
+//     // });
+//     // app.root.addChild(entity);
+    
 // });
 
 // Create an Entity with a camera component
-var camera = new pc.Entity();
-camera.addComponent("camera", {
-    clearColor: new pc.Color(0.4, 0.45, 0.5)
-});
-camera.translate(0, 7, 24);
-app.root.addChild(camera);
+// var camera = new pc.Entity();
+// camera.addComponent("camera", {
+//     clearColor: new pc.Color(0.4, 0.45, 0.5)
+// });
+// camera.translate(0, 7, 24);
+// app.root.addChild(camera);
 
 // Create an Entity with a point light component
 var light = new pc.Entity();
@@ -71,6 +84,12 @@ light.addComponent("light", {
 });
 light.translate(5, 0, 15);
 app.root.addChild(light);
+
+//init keyboard
+app.keyboard = new pc.Keyboard(document.body);
+app.mouse = new pc.Mouse(document.body);
+
+
 
 app.on("update", function (dt) {
     if (entity) {
