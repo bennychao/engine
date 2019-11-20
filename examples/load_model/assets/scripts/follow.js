@@ -36,16 +36,24 @@ Follow.prototype.update = function(dt) {
     // set the position for this entity
     this.entity.setPosition(this.vec); 
 
-
-
     var x = 0;
     var y = 0;
+    var entity = this.entity;
+    
+    app.mouse.on('mouseup', function (event) {
+    if (event.button == pc.MOUSEBUTTON_LEFT) {
+        x = event.x;
+        y = event.y;
 
-    mouse.on('mousemove', function (event) {
-    if (event.buttons[pc.MOUSEBUTTON_LEFT]) {
-        x += event.dx;
+        //entity.setLocalEulerAngles(0, 0.2*x, 0);
+        // Get the start and end points of a 3D ray fired from a screen click position
+        var start = entity.camera.screenToWorld(x, y, entity.camera.nearClip);
+        var end = entity.camera.screenToWorld(x, y, entity.camera.farClip);
 
-        entity.setLocalEulerAngles(0, 0.2*x, 0);
+        // Use the ray coordinates to perform a raycast
+        app.systems.rigidbody.raycastFirst(start, end, function (result) {
+            console.log("Entity " + result.entity.name + " was selected");
+        });
     }
     });
 };

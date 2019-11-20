@@ -243,13 +243,12 @@
         },
         "script": {
           "enabled": true,
-          "order": [ "follow" ],
+          "order": [ "first_person_camera" ],
           "scripts": {
-            "follow": {
+            "first_person_camera": {
               "enabled": true,
               "attributes": {
-                "target": "e8ae4f87-6751-11e5-b6f2-8438356164ca",
-                "distance": 4
+                "speed": 8
               }
             }
           }
