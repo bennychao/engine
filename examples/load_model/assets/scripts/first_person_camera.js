@@ -2,7 +2,7 @@ var FirstPersonCamera = pc.createScript('first_person_camera')
 
 FirstPersonCamera.attributes.add('speed', {
     type: 'number',
-    default: 10
+    default: 0.1
 });
 
 FirstPersonCamera.prototype.initialize = function () {
@@ -26,19 +26,25 @@ FirstPersonCamera.prototype.update = function (dt) {
 
     // calculate force based on pressed keys
     if (this.app.keyboard.isPressed(pc.KEY_LEFT)) {
-        this.force.x = pc.math.lerp(this.force.x, -this.speed, 0.1);
+        this.force.x = pc.math.lerp(this.force.x, -this.speed, 0.01);
     } 
-
-    if (this.app.keyboard.isPressed(pc.KEY_RIGHT)) {
-        this.force.x = pc.math.lerp(this.force.x, this.speed, 0.1);
+    else if (this.app.keyboard.isPressed(pc.KEY_RIGHT)) {
+        this.force.x = pc.math.lerp(this.force.x, this.speed, 0.01);
+    }
+    else
+    {
+        this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
     }
 
     if (this.app.keyboard.isPressed(pc.KEY_UP)) {
-        this.force.z = pc.math.lerp(this.force.z, this.speed, 0.1);
+        this.force.z = pc.math.lerp(this.force.z, this.speed, 0.01);
     } 
-
-    if (this.app.keyboard.isPressed(pc.KEY_DOWN)) {
-        this.force.z = pc.math.lerp(this.force.z, -this.speed, 0.1);
+    else if (this.app.keyboard.isPressed(pc.KEY_DOWN)) {
+        this.force.z = pc.math.lerp(this.force.z, -this.speed, 0.01);
+    }
+    else
+    {
+        this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
     }
 
     var mat = this.entity.getWorldTransform();

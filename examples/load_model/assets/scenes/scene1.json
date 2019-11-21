@@ -248,7 +248,7 @@
             "first_person_camera": {
               "enabled": true,
               "attributes": {
-                "speed": 8
+                "speed": 0.1
               }
             }
           }
