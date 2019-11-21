@@ -4,3 +4,36 @@
     float:bottom;
     border:1px solid red;
 }
+
+.not-used{
+    background-image:url("../images/ui_health_tube.png");
+    background-repeat:no-repeat; background-size:100% 100%;
+    
+    background-color:rgba(117, 34, 34, 1);
+}
+
+.btn-mybtn {
+    background-color:rgba(0,0,0,0);
+    border-color:rgba(0,0,0,0);
+}
+
+.btn-mybtn:hover img {
+    background-color:rgba(0,0,0,0);
+    border-color:rgba(0,0,0,0);
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.btn-mybtn:active{
+    background-color:rgba(117, 34, 34, 1);
+}
+
+.btn-mybtn:focus{
+    background-color:rgba(117, 34, 34, 1);
+    border-color:rgba(0,0,0,0);
+}
+
+.btn-my-focus img{
+    border-color:rgba(0,0,0,0); 
+    content: url("../images/ui_health_tube.png");
+    background-image:url("../images/ui_health_tube.png");
+    background-repeat:no-repeat; background-size:100% 100%;
+}
