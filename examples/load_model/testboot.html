@@ -19,6 +19,21 @@
 
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
 
+    <div class="navigator-closed-btns">
+        <div class="closed-btn super-mall-hall">
+            <div class="name">逛集市</div>
+        </div>
+        <div class="closed-btn brand-hall active">
+            <div class="name">选品牌</div>
+        </div> 
+        <div class="closed-btn theme-hall"><div class="name">主题馆</div></div>
+    </div>
+
+
+    <div>
+        tata
+    </div>
+
     <div class="main_nav_bottom">
         <nav class="navbar navbar-default navbar-fixed-bottom">
             <div class="container" align="center" id="app">
@@ -38,11 +53,11 @@
                                 <li>
                                     <div class="row" align="center" >
                                         <button type="button" class="btn btn-default1 img-responsive">
-                                            <img src="./assets/images/ui_btn.png" class="img-responsive"  alt="Cinque Terre11">
+                                            <img src="../assets/images/ui_btn.png" class="img-responsive"  alt="Cinque Terre11">
                                         </button>
                                     </div>
                                     <div :id= "site.id" class="row btn-mybtn" align="center" v-on:click="click" v-bind:class="site.selected" >
-                                            <img :id= "site.id" src="./assets/images/ui_btn.png" class="img-responsive"  alt="Cinque Terre11">
+                                            <img :id= "site.id" src="../assets/images/ui_btn.png" class="img-responsive"  alt="Cinque Terre11">
                                         {{ site.name }}
                                     </div>
                                 </li>
