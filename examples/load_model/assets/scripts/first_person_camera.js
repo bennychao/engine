@@ -1,16 +1,30 @@
-var FirstPersonCamera = pc.createScript('first_person_camera')
+var FirstPersonCamera = pc.createScript('first_person_camera');
 
 FirstPersonCamera.attributes.add('speed', {
     type: 'number',
     default: 0.1
 });
 
+FirstPersonCamera.attributes.add('steerFactor', {
+    type: 'number',
+    default: 0.1
+});
+
+FirstPersonCamera.attributes.add('ground', {
+    type: 'entity',
+    title: 'Ground',
+    description: 'The Ground Entity'
+});
+
 FirstPersonCamera.prototype.initialize = function () {
     // Camera euler angle rotation around x and y axes
-    var eulers = this.entity.getLocalEulerAngles()
+    var eulers = this.entity.getLocalEulerAngles();
     this.ex = eulers.x;
     this.ey = eulers.y;
     this.force = new pc.Vec3();
+    this.bSteering = false;
+    
+    this.startPos = new pc.Vec2();
 
     // Disabling the context menu stops the browser displaying a menu when
     // you right-click the page
@@ -18,34 +32,30 @@ FirstPersonCamera.prototype.initialize = function () {
     mouse.disableContextMenu();
     mouse.on(pc.EVENT_MOUSEMOVE, this.onMouseMove, this);
     mouse.on(pc.EVENT_MOUSEDOWN, this.onMouseDown, this);
+    
+    mouse.on(pc.EVENT_MOUSEUP, this.onMouseUp, this);
+    
+    this.entity.on("onSteerStart", this.onSteerStart,this);
+    this.entity.on("onSteerStop", this.onSteerStop,this);
+    this.entity.on("onSteer", this.onSteer,this);
+    
+    var h =  this.ground.getPosition().y + 1.8;
+    
+    var pos =  this.entity.getPosition();
+    pos.y = h;
+    
+    this.entity.setPosition(pos);
+    
+    this.bMouseDown = false;
+    
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
     // Update the camera's orientation
     this.entity.setLocalEulerAngles(this.ex, this.ey, 0);
 
-    // calculate force based on pressed keys
-    if (this.app.keyboard.isPressed(pc.KEY_LEFT)) {
-        this.force.x = pc.math.lerp(this.force.x, -this.speed, 0.01);
-    } 
-    else if (this.app.keyboard.isPressed(pc.KEY_RIGHT)) {
-        this.force.x = pc.math.lerp(this.force.x, this.speed, 0.01);
-    }
-    else
-    {
-        this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
-    }
-
-    if (this.app.keyboard.isPressed(pc.KEY_UP)) {
-        this.force.z = pc.math.lerp(this.force.z, this.speed, 0.01);
-    } 
-    else if (this.app.keyboard.isPressed(pc.KEY_DOWN)) {
-        this.force.z = pc.math.lerp(this.force.z, -this.speed, 0.01);
-    }
-    else
-    {
-        this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
-    }
+    if (!this.bSteering)
+        this.checkMouseMove();
 
     var mat = this.entity.getWorldTransform();
 
@@ -77,18 +87,146 @@ FirstPersonCamera.prototype.update = function (dt) {
 
 };
 
+FirstPersonCamera.prototype.checkMouseMove = function (event) {
+    // Update the current Euler angles, clamp the pitch.
+    // calculate force based on pressed keys
+    if (this.app.keyboard.isPressed(pc.KEY_LEFT)) {
+        this.force.x = pc.math.lerp(this.force.x, -this.speed, 0.01);
+    } 
+    else if (this.app.keyboard.isPressed(pc.KEY_RIGHT)) {
+        this.force.x = pc.math.lerp(this.force.x, this.speed, 0.01);
+    }
+    else
+    {
+        this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
+    }
+
+    if (this.app.keyboard.isPressed(pc.KEY_UP)) {
+        this.force.z = pc.math.lerp(this.force.z, -this.speed, 0.01);
+    } 
+    else if (this.app.keyboard.isPressed(pc.KEY_DOWN)) {
+        this.force.z = pc.math.lerp(this.force.z, this.speed, 0.01);
+    }
+    else
+    {
+        this.force.z = pc.math.lerp(this.force.z, 0, 0.1);
+    }
+};
+
 FirstPersonCamera.prototype.onMouseMove = function (event) {
     // Update the current Euler angles, clamp the pitch.
-    if (pc.Mouse.isPointerLocked()) {
+    //if (pc.Mouse.isPointerLocked()) {
+    if (this.bMouseDown) {
         this.ex -= event.dy / 5;
         this.ex = pc.math.clamp(this.ex, -90, 90);
-        this.ey -= event.dx / 5;
+        this.ey -= event.dx / 5; 
     }
 };
 
 FirstPersonCamera.prototype.onMouseDown = function (event) {
     // When the mouse button is clicked try and capture the pointer
-    if (!pc.Mouse.isPointerLocked()) {
-        this.app.mouse.enablePointerLock();
+    if (!this.bSteering && !this.bMouseDown) {  // && !pc.Mouse.isPointerLocked()
+        //this.app.mouse.enablePointerLock();
+        this.bMouseDown = true;
+        this.startPos = new pc.Vec2(event.x, event.y);
     }
+};
+
+FirstPersonCamera.prototype.onMouseUp = function (event) {
+    // When the mouse button is clicked try and capture the pointer
+    if (!this.bSteering && this.bMouseDown) { // && !pc.Mouse.isPointerLocked()
+        //this.app.mouse.disablePointerLock();        
+        this.bMouseDown = false;
+        
+        var cur = new pc.Vec2(event.x, event.y);
+        cur.sub(this.startPos);
+        
+        if (cur.lengthSq()< 0.01){
+            //move to 
+            this.checkRay(event);
+        }
+    }
+};
+
+FirstPersonCamera.prototype.onSteerStart = function (curDir) {
+    this.bSteering = true;
+};
+
+FirstPersonCamera.prototype.onSteerStop = function (curDir) {
+    this.bSteering = false;
+};
+
+FirstPersonCamera.prototype.onSteer = function (curDir) {
+    // Update the current Euler angles, clamp the pitch.
+    // 
+    // factor
+    this.force = new pc.Vec3(curDir.x * this.speed / 50, 0, -curDir.y * this.speed / 50);
+};
+
+FirstPersonCamera.prototype.faceTo = function (target) {
+    //this.bSteering = true;
+    //target is a entity
+    var dir = this.target.forward.clone();
+    dir.scale(1);
+    
+    var pos = this.target.getPosition();
+    
+    pos.add(dir);
+    
+    pos.y = this.entity.getPosition().y;
+    
+    this.entity.setPosition(pos);
+    
+    pos = this.target.getPosition();
+    
+    this.entity.lookAt(pos);
+};
+
+FirstPersonCamera.prototype.checkRay = function (event) {
+    var start = this.entity.camera.screenToWorld(event.x, event.y, this.entity.camera.nearClip);
+    var end = this.entity.camera.screenToWorld(event.x, event.y, this.entity.camera.farClip);
+
+    
+    var v1 = start.clone();
+    var v2 = start.clone();
+    
+    v1.sub(end);
+    
+    v2.y = this.entity.getPosition().y;
+    
+    var a = this.angle(v1, v2);
+    
+    var h = v2.y - start.y;
+    
+    var l = Math.tan(a ) * h;
+    
+    var dir = v1.clone();
+
+    dir.y = 0;
+    
+    dir.normalize();
+    
+    v2.add(dir.scale(l));
+    
+    //check is in Box
+    var box = new pc.BoundingBox(this.entity.getPosition(), this.entity.getLocalScale().scale(0.5));
+    
+    return box.containsPoint(v2);
+    
+        // Use the ray coordinates to perform a raycast
+    //this.app.systems.rigidbody.raycastFirst(start, end, function (result) {
+    //    console.log("Entity " + result.entity.name + " was selected");
+    //});
+    
+};
+
+
+FirstPersonCamera.prototype.angle = function (v1, v2) {
+    
+    var d = Math.acos(v1.dot(v2.UP) / (v1.length() * v2.length()));
+            
+    //var ret = d * 180 / Math.PI;
+    ret = d;
+    
+    return ret;
 };
