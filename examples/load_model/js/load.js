@@ -8,7 +8,7 @@ app.start();
 app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
-app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
+// app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
 
 var entity, light, camera;
 
@@ -41,28 +41,29 @@ var entity, light, camera;
 pc.SceneMgr.load("scene1", function(){});
 
     //25021783
-    var url = "./assets/models/ball.json";
+    // var url = "./assets/models/ball.json";
 
-    app.assets.loadFromUrl(url, "model",function(err, asset){
+    // app.assets.loadFromUrl(url, "model",function(err, asset){
 
-        asset.id = 2502178115;
+    //     asset.id = 2502178115;
        
-    });
+    // });
 
-    url = "./assets/models/plain.json";
+      url = "./assets/models/ball.json";
 
-    app.assets.loadFromUrl(url, "model",function(){});
+//     // app.assets.loadFromUrl(url, "model",function(){});
 // app.assets.loadFromUrl(url, "model", function (err, asset) {
-//     //  entity = new pc.Entity();
-//     //  var asset = app.assets.find("ball", "model");
-//     // // //asset.id = 1001;
-//     // entity.setLocalPosition(0, 0, 0.1);
-//     // entity.addComponent("model", {
-//     //     type: "asset",
-//     //     asset: asset,
-//     //     castShadows: true
-//     // });
-//     // app.root.addChild(entity);
+//         //asset.id = 2502178115;
+//       entity = new pc.Entity();
+//      var asset = app.assets.find("ball.json", "model");
+//     // //asset.id = 1001;
+//     entity.setLocalPosition(0, 0, 0.1);
+//     entity.addComponent("model", {
+//         type: "asset",
+//         asset: asset,
+//         castShadows: true
+//     });
+//     app.root.addChild(entity);
     
 // });
 
@@ -75,15 +76,15 @@ pc.SceneMgr.load("scene1", function(){});
 // app.root.addChild(camera);
 
 // Create an Entity with a point light component
-var light = new pc.Entity();
-light.addComponent("light", {
-    type: "point",
-    color: new pc.Color(1, 1, 1),
-    range: 100,
-    castShadows: true
-});
-light.translate(5, 0, 15);
-app.root.addChild(light);
+// var light = new pc.Entity();
+// light.addComponent("light", {
+//     type: "point",
+//     color: new pc.Color(1, 1, 1),
+//     range: 100,
+//     castShadows: true
+// });
+// light.translate(5, 0, 15);
+// app.root.addChild(light);
 
 //init keyboard
 app.keyboard = new pc.Keyboard(document.body);

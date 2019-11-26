@@ -1,1 +1,132 @@
-{"occludeSpecular":true,"specularMap":"../25021793/platform.png","specularMapChannel":"rgb","heightMapOffset":[0,0],"metalness":1,"depthTest":true,"heightMapTiling":[1,1],"bumpMapFactor":1,"aoMapChannel":"r","diffuseMapOffset":[0,0],"ambient":[0.1,0.1,0.1],"metalnessMapChannel":"r","shadowSampleType":1,"depthWrite":true,"lightMapChannel":"rgb","glossMap":"../25021793/platform.png","opacityMapOffset":[0,0],"glossMapOffset":[0,0],"reflectivity":1,"normalMapTiling":[1,1],"heightMapFactor":1,"metalnessMapOffset":[0,0],"heightMapChannel":"r","specularMapTiling":[1,1],"opacityMapChannel":"r","emissiveMapOffset":[0,0],"emissiveMapTiling":[1,1],"diffuseMap":"../25021793/platform.png","specularMapTint":true,"glossMapTiling":[1,1],"opacity":1,"emissive":[0.5058823823928833,0.5058823823928833,0.5058823823928833],"shininess":77.53,"specularAntialias":true,"diffuseMapTiling":[1,1],"specularMapOffset":[0,0],"blendType":3,"aoMapTiling":[1,1],"diffuse":[0.5843137502670288,0.5843137502670288,0.5843137502670288],"diffuseMapChannel":"rgb","lightMapOffset":[0,0],"opacityMapTiling":[1,1],"conserveEnergy":true,"refractionIndex":0.6666666666666666,"glossMapChannel":"rgb","specular":[0.1,0.1,0.1],"metalnessMapTiling":[1,1],"emissiveMapChannel":"rgb","aoMapOffset":[0,0],"lightMapTiling":[1,1],"normalMapOffset":[0,0],"cull":1,"shader":"blinn","mapping_format":"path"}
+{
+    "occludeSpecular": true,
+    "specularMap": "../25021793/Platform.png",
+    "specularMapChannel": "rgb",
+    "heightMapOffset": [
+        0,
+        0
+    ],
+    "metalness": 1,
+    "depthTest": true,
+    "heightMapTiling": [
+        1,
+        1
+    ],
+    "bumpMapFactor": 1,
+    "aoMapChannel": "r",
+    "diffuseMapOffset": [
+        0,
+        0
+    ],
+    "ambient": [
+        0.5843137502670288,
+        0.5843137502670288,
+        0.5843137502670288
+    ],
+    "metalnessMapChannel": "r",
+    "shadowSampleType": 1,
+    "depthWrite": true,
+    "lightMapChannel": "rgb",
+    "glossMap": "../25021793/Platform.png",
+    "opacityMapOffset": [
+        0,
+        0
+    ],
+    "glossMapOffset": [
+        0,
+        0
+    ],
+    "reflectivity": 1,
+    "normalMapTiling": [
+        1,
+        1
+    ],
+    "heightMapFactor": 1,
+    "metalnessMapOffset": [
+        0,
+        0
+    ],
+    "heightMapChannel": "r",
+    "specularMapTiling": [
+        1,
+        1
+    ],
+    "opacityMapChannel": "r",
+    "emissiveMapOffset": [
+        0,
+        0
+    ],
+    "emissiveMapTiling": [
+        1,
+        1
+    ],
+    "diffuseMap": "../25021793/Platform.png",
+    "specularMapTint": true,
+    "glossMapTiling": [
+        1,
+        1
+    ],
+    "opacity": 1,
+    "emissive": [
+        0.5058823823928833,
+        0.5058823823928833,
+        0.5058823823928833
+    ],
+    "shininess": 77.53,
+    "specularAntialias": true,
+    "diffuseMapTiling": [
+        1,
+        1
+    ],
+    "specularMapOffset": [
+        0,
+        0
+    ],
+    "blendType": 3,
+    "aoMapTiling": [
+        1,
+        1
+    ],
+    "diffuse": [
+        0.5843137502670288,
+        0.5843137502670288,
+        0.5843137502670288
+    ],
+    "diffuseMapChannel": "rgb",
+    "lightMapOffset": [
+        0,
+        0
+    ],
+    "opacityMapTiling": [
+        1,
+        1
+    ],
+    "conserveEnergy": true,
+    "refractionIndex": 0.6666666666666666,
+    "glossMapChannel": "rgb",
+    "specular": [
+        0.7098039215686275,
+        0.7098039215686275,
+        0.7098039215686275
+    ],
+    "metalnessMapTiling": [
+        1,
+        1
+    ],
+    "emissiveMapChannel": "rgb",
+    "aoMapOffset": [
+        0,
+        0
+    ],
+    "lightMapTiling": [
+        1,
+        1
+    ],
+    "normalMapOffset": [
+        0,
+        0
+    ],
+    "cull": 1,
+    "shader": "blinn",
+    "mapping_format": "path"
+}
