@@ -23,6 +23,7 @@ FirstPersonCamera.prototype.initialize = function () {
     this.ey = eulers.y;
     this.force = new pc.Vec3();
     this.bSteering = false;
+    this.bTargeting = false;
     
     this.startPos = new pc.Vec2();
 
@@ -48,13 +49,22 @@ FirstPersonCamera.prototype.initialize = function () {
     
     this.bMouseDown = false;
     
+    var size = this.ground.getLocalScale().clone();
+        //check is in Box
+    this.broundbox = new pc.BoundingBox(this.ground.getPosition(), size.scale(0.5));
+    
+    
+    this.obstacleList =new Array();
+    
+    //find the obstacle
+    
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
     // Update the camera's orientation
     this.entity.setLocalEulerAngles(this.ex, this.ey, 0);
 
-    if (!this.bSteering)
+    if (!this.bSteering && !this.bTargeting)
         this.checkMouseMove();
 
     var mat = this.entity.getWorldTransform();
@@ -84,7 +94,7 @@ FirstPersonCamera.prototype.update = function (dt) {
     //     this.entity.translateLocal(this.speed*dt, 0, 0);
     // }
 
-
+    this.fire("onUpdate");
 };
 
 FirstPersonCamera.prototype.checkMouseMove = function (event) {
@@ -125,7 +135,7 @@ FirstPersonCamera.prototype.onMouseMove = function (event) {
 
 FirstPersonCamera.prototype.onMouseDown = function (event) {
     // When the mouse button is clicked try and capture the pointer
-    if (!this.bSteering && !this.bMouseDown) {  // && !pc.Mouse.isPointerLocked()
+    if (!this.bSteering && !this.bTargeting && !this.bMouseDown) {  // && !pc.Mouse.isPointerLocked()
         //this.app.mouse.enablePointerLock();
         this.bMouseDown = true;
         this.startPos = new pc.Vec2(event.x, event.y);
@@ -134,7 +144,7 @@ FirstPersonCamera.prototype.onMouseDown = function (event) {
 
 FirstPersonCamera.prototype.onMouseUp = function (event) {
     // When the mouse button is clicked try and capture the pointer
-    if (!this.bSteering && this.bMouseDown) { // && !pc.Mouse.isPointerLocked()
+    if (!this.bSteering && !this.bTargeting && this.bMouseDown) { // && !pc.Mouse.isPointerLocked()
         //this.app.mouse.disablePointerLock();        
         this.bMouseDown = false;
         
@@ -143,7 +153,12 @@ FirstPersonCamera.prototype.onMouseUp = function (event) {
         
         if (cur.lengthSq()< 0.01){
             //move to 
-            this.checkRay(event);
+           var ret = this.checkRay(event);
+            console.log("check Ray is " + ret);
+            if (ret.bContain)
+                {
+                    //this.moveTo(ret.pos);
+                }
         }
     }
 };
@@ -187,31 +202,35 @@ FirstPersonCamera.prototype.checkRay = function (event) {
     var end = this.entity.camera.screenToWorld(event.x, event.y, this.entity.camera.farClip);
 
     
-    var v1 = start.clone();
+    var v1 = end.clone();
     var v2 = start.clone();
     
-    v1.sub(end);
+    v1.sub(start);
     
-    v2.y = this.entity.getPosition().y;
+    v2.y = this.ground.getPosition().y;
     
-    var a = this.angle(v1, v2);
+    var v2toStart = v2.clone();
+    v2toStart.sub(start);
     
-    var h = v2.y - start.y;
+    var a = this.angle(v1, v2toStart);
+     
+    var h = start.y - v2.y;
     
-    var l = Math.tan(a ) * h;
+    var l = Math.tan(a) * h;
     
     var dir = v1.clone();
 
     dir.y = 0;
     
-    dir.normalize();
+    dir.normalize(); 
     
     v2.add(dir.scale(l));
     
-    //check is in Box
-    var box = new pc.BoundingBox(this.entity.getPosition(), this.entity.getLocalScale().scale(0.5));
-    
-    return box.containsPoint(v2);
+   
+    return {
+        bContain: this.broundbox.containsPoint(v2),
+        pos: v2
+    };
     
         // Use the ray coordinates to perform a raycast
     //this.app.systems.rigidbody.raycastFirst(start, end, function (result) {
@@ -220,13 +239,59 @@ FirstPersonCamera.prototype.checkRay = function (event) {
     
 };
 
+FirstPersonCamera.prototype.moveTo = function (target) {
+    
+    var cur = this;
+    this.bTargeting = true;
+    
+    var onupdateFunc = function(){     
+        
+        var t = target.clone();
+        t.y = cur.entity.getPosition().y;
+        t.sub(cur.entity.getPosition());
+        
+       //check if stop
+        
+        //var dis = t.distance(this.entity.getPosition());
+        if (t.lengthSq() < 0.5 || cur.checkObstacle())
+            {
+                cur.off("onUpdate");
+                this.bTargeting = false;
+                this.force.x = 0;
+                this.force.z = 0;
+               // this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
+               // this.force.z = pc.math.lerp(this.force.z, 0, 0.1);
+            }
+        else
+            {
+                t.normalize(); 
+
+                t.scale(cur.speed);
+
+                this.force.x = pc.math.lerp(this.force.x, t.x, 0.1);
+                this.force.z = pc.math.lerp(this.force.z, t.z, 0.1);
+            }
+
+        
+        //check if has a obstacles
+        
+    };
+    
+    this.on("onUpdate", onupdateFunc);
+};
+
+FirstPersonCamera.prototype.checkObstacle = function () {
+    
+    return false;
+};
+
 
 FirstPersonCamera.prototype.angle = function (v1, v2) {
     
-    var d = Math.acos(v1.dot(v2.UP) / (v1.length() * v2.length()));
+    var d = Math.acos(v1.dot(v2) / (v1.length() * v2.length()));
             
     //var ret = d * 180 / Math.PI;
-    ret = d;
+    //ret = d;
     
-    return ret;
+    return d;
 };
