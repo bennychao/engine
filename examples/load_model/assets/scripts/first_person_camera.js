@@ -52,11 +52,9 @@ FirstPersonCamera.prototype.initialize = function () {
     var size = this.ground.getLocalScale().clone();
         //check is in Box
     this.broundbox = new pc.BoundingBox(this.ground.getPosition(), size.scale(0.5));
-    
-    
-    this.obstacleList =new Array();
-    
+            
     //find the obstacle
+    this.loadObstacles();
     
 };
 
@@ -280,9 +278,35 @@ FirstPersonCamera.prototype.moveTo = function (target) {
     this.on("onUpdate", onupdateFunc);
 };
 
-FirstPersonCamera.prototype.checkObstacle = function () {
+FirstPersonCamera.prototype.loadObstacles = function () {    
     
-    return false;
+    this.obstacleList =new Array();
+    var collisions = this.app.root.find(function(node) {
+        return node.collision && !node.tags.has('ground'); // player
+    });
+    
+    collisions.forEach(function (node){
+        
+        if (node.collision.type == "box"){
+            
+            var box = new pc.BoundingBox(node.getPosition(), node.collision.halfExtents);
+            this.obstacleList.push(box);
+        }
+        else  if (node.collision.type == "sphere"){
+            
+            var sphere = new pc.BoundingSphere(node.getPosition(), node.collision.halfExtents.x);
+            this.obstacleList.push(sphere);
+        }
+    
+    }); 
+};
+
+
+FirstPersonCamera.prototype.checkObstacle = function (vec) {
+    var obs = this.obstacleList.filter(function(ob) {
+        return ob.containsPoint(vec);
+    });
+    return obs.size() > 0;
 };
 
 
