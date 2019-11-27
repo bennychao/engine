@@ -28,15 +28,15 @@
     </div>
 
     <!--  -->
-    <div id="navigator-container" class="navigator-container double-eleven">
+    <div id="container" class="navigator-container double-eleven"  v-show="show">
         <div class="navigator-closed-btns">
-            <div class="closed-btn super-mall-hall active">
+            <div class="closed-btn super-mall-hall active" v-on:click="OnClickCars">
                 <div class="name">逛集市</div>
             </div>
-            <div class="closed-btn brand-hall">
+            <div class="closed-btn brand-hall" v-on:click="OnClickBrands">
                 <div class="name">选品牌</div>
             </div>
-            <div class="closed-btn theme-hall">
+            <div class="closed-btn theme-hall" v-on:click="OnClickSearches">
                 <div class="name">主题馆</div>
             </div>
         </div>
@@ -44,9 +44,9 @@
 
 
 
-    <nav class="navbar navbar-inverse navbar-fixed-left sibebar-wrapper"id="sidebar-wrapper" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-left sibebar-wrapper" id="sidebar" role="navigation" style="display: none;">
 
-        <div class="navigator-opened-btn">
+        <div id="nav-opened" class="navigator-opened-btn" v-show="show" v-on:click="OnClick">
             <img src="./assets/images/opened.png">
         </div>
 
@@ -54,13 +54,13 @@
             <!-- tabs controller -->
             <div class="col-xs-12 sidebar-menu"  id="tabs">
                 <div class="row">
-                    <div class="col-xs-4 sidebar-menu-item active" v-on:click="OnClickCars">
+                    <div class="col-xs-4 sidebar-menu-item" v-on:click="OnClickCars" v-bind:class="isCarsActived">
                         <div class="">Cars</div>
                     </div>
-                    <div class="col-xs-4 sidebar-menu-item" v-on:click="OnClickBrands">
+                    <div class="col-xs-4 sidebar-menu-item" v-on:click="OnClickBrands"  v-bind:class="isBrandsActived">
                         <div class="">Brands</div>
                     </div>
-                    <div class="col-xs-4 sidebar-menu-item" v-on:click="OnClickSearches">
+                    <div class="col-xs-4 sidebar-menu-item" v-on:click="OnClickSearches"  v-bind:class="isSearchActived">
                         <div class="">Title</div>
                     </div>
     

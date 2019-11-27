@@ -308,7 +308,7 @@ ul, li, em, p, dd, dt, dl, ol, h1, h2, h3, h4, h5, h6 {
 .sibebar-wrapper .navigator-opened-btn {
     width: 30px;
     position: absolute;
-    left: -30px;
+    left: -31px;
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
@@ -335,6 +335,13 @@ ul, li, em, p, dd, dt, dl, ol, h1, h2, h3, h4, h5, h6 {
     background-size: 100% 100%;
     
     background-image: url("../images/ui_btn.png");
+}
+
+.sibebar-wrapper .sidebar-item .car-button:hover{
+    color: rgb(252, 206, 1);
+    background-color:rgba(117, 5, 5, 0.582);
+    border-color:rgba(78, 185, 7, 0.651);
+    border-inline-color: rgb(252, 206, 1);
 }
 
 .sibebar-wrapper .sidebar-item .car-button.is-focused{
@@ -372,7 +379,10 @@ ul, li, em, p, dd, dt, dl, ol, h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid #7a7a7b;
 }
 
-
+.sidebar-menu .sidebar-menu-item:hover {
+    background-color:rgba(219, 194, 81, 0.404);
+    border-bottom: 1px solid #8d7f6d;
+}
 .navbar .icon {
     position: absolute;
     right: 0;
