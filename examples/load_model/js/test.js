@@ -263,36 +263,36 @@ var tabs = new Vue(
   }
 )
 //for nav bar
-  var selectCardShow = 1;
+//   var selectCardShow = 1;
 
-var app2 = new Vue({
-    el: '#app2',
-    data: {
-      sites: [
-        { name: 'Runoob', id :'1', isRecommend: {'is-recommend': true}},
-        { name: 'Google', id : '2'},
-        { name: 'Taobao', id : '3', isFocused: {'is-focused': false}},
-        { name: 'Google', id : '4'},
-        { name: 'Google', id : '5'}
-      ]
-    },
-    methods: {
-      click: function (event) {
-        // `this` 在方法里指当前 Vue 实例
-         //alert('Hello ' + this.name + '!')
-        // // `event` 是原生 DOM 事件
-        // if (event) {
-        //     alert(event.target.tagName)
-        // }
-        selectCardShow =new Number(event.target.id);
+// var app2 = new Vue({
+//     el: '#app2',
+//     data: {
+//       sites: [
+//         { name: 'Runoob', id :'1', isRecommend: {'is-recommend': true}},
+//         { name: 'Google', id : '2'},
+//         { name: 'Taobao', id : '3', isFocused: {'is-focused': false}},
+//         { name: 'Google', id : '4'},
+//         { name: 'Google', id : '5'}
+//       ]
+//     },
+//     methods: {
+//       click: function (event) {
+//         // `this` 在方法里指当前 Vue 实例
+//          //alert('Hello ' + this.name + '!')
+//         // // `event` 是原生 DOM 事件
+//         // if (event) {
+//         //     alert(event.target.tagName)
+//         // }
+//         selectCardShow =new Number(event.target.id);
 
-        app2.sites.forEach(element => {
-          element.isFocused = {'is-focused': false};
-        });
-        app2.sites[selectCardShow - 1].isFocused = {'is-focused': true};
-      }
-    }
-  });
+//         app2.sites.forEach(element => {
+//           element.isFocused = {'is-focused': false};
+//         });
+//         app2.sites[selectCardShow - 1].isFocused = {'is-focused': true};
+//       }
+//     }
+//   });
 
   // var sidebar = new Vue({
   //   el: '#sidebar',
@@ -322,7 +322,13 @@ var app2 = new Vue({
     methods: {
       OnClick: function (event) {
         container.show = true;
-        $("#sidebar").hide();
+        //$("#sidebar").hide();
+      　$("#sidebar").removeClass("sibebar-wrapper-enter-active");
+        $("#sidebar").addClass("sibebar-wrapper-leave-active");
+        　　setTimeout(function(){
+                  $("#sidebar").removeClass("sibebar-wrapper-leave-active");
+                 $("#sidebar").hide();
+          　　},500);
         navOpened.show = false;
         //sidebar.show = true;
         cars.show = false;
@@ -342,9 +348,18 @@ var app2 = new Vue({
       show : true
     },
     methods: {
+      onClickTest: function (event) {
+        container.show = false;
+      },
+
       OnClickCars: function (event) {
         container.show = false;
         $("#sidebar").show();
+        $("#sidebar").removeClass("sibebar-wrapper-leave-active");
+        $("#sidebar").addClass("sibebar-wrapper-enter-active");
+    　　setTimeout(function(){
+      　　　　$("#sidebar").removeClass("sibebar-wrapper-enter-active");
+      　　},500);
         navOpened.show = true;
         tabs.isCarsActived =  {'active': true};
         cars.show = true;
@@ -354,6 +369,11 @@ var app2 = new Vue({
       OnClickBrands: function (event) {
         container.show = false;
         $("#sidebar").show();
+        $("#sidebar").removeClass("sibebar-wrapper-leave-active");
+        $("#sidebar").addClass("sibebar-wrapper-enter-active");
+    　　setTimeout(function(){
+      　　　　$("#sidebar").removeClass("sibebar-wrapper-enter-active");
+      　　},500);
         navOpened.show = true;
         brands.show = true;
         tabs.isBrandsActived =  {'active': true};
@@ -363,6 +383,11 @@ var app2 = new Vue({
       OnClickSearches: function (event) {
         container.show = false;
         $("#sidebar").show();
+        $("#sidebar").removeClass("sibebar-wrapper-leave-active");
+        $("#sidebar").addClass("sibebar-wrapper-enter-active");
+    　　setTimeout(function(){
+      　　　　$("#sidebar").removeClass("sibebar-wrapper-enter-active");
+      　　},500);
         navOpened.show = true;
         searches.show = true;
         tabs.isSearchActived =  {'active': true};

@@ -97,22 +97,67 @@ ul, li, em, p, dd, dt, dl, ol, h1, h2, h3, h4, h5, h6 {
 }
 
 
-.navigator-closed-btns-enter-active {
-    animation: bounce-in .5s;
+.navigator-enter-active {
+    animation: bounce-im 0.5s;
 }
-.navigator-closed-btns-leave-active {
-animation: bounce-in .5s reverse;
+.navigator-leave-active {
+    animation: bounce-im 0.5s reverse;
 }
 
 @keyframes bounce-in {
     0% {
         transform: scale(0);
+        -webkit-transform:scale(0);
+        -moz-transform:scale(0);
+        opacity: 0;
     }
-    50% {
-        transform: scale(1.1);
+    30% {
+        transform: scale(1.05);
+        -webkit-transform:scale(1.05);
+        -moz-transform:scale(1.05);
+        opacity: 0.9;
     }
     100% {
         transform: scale(1);
+        -webkit-transform:scale(1);
+        -moz-transform:scale(1);
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+    30% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+.sibebar-wrapper-enter-active {
+    animation: go-im 0.5s reverse;
+}
+.sibebar-wrapper-leave-active {
+    animation: go-im 0.5s;
+}
+
+
+@keyframes go-im{
+    from{
+        -webkit-transform:translateX(0);
+        -moz-transform:translateX(0);
+        transform:translateX(0);
+        opacity: 1;
+    }
+    to{
+        -webkit-transform:translateX(100%);
+        -moz-transform:translateX(100%);
+        transform:translateX(100%);
+        opacity: 0;
     }
 }
 
