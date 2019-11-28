@@ -327,7 +327,7 @@ animation: bounce-in .5s reverse;
 .sibebar-wrapper .navigator-opened-btn {
     width: 30px;
     position: absolute;
-    left: -30px;
+    left: -31px;
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
@@ -354,6 +354,13 @@ animation: bounce-in .5s reverse;
     background-size: 100% 100%;
     
     background-image: url("../images/ui_btn.png");
+}
+
+.sibebar-wrapper .sidebar-item .car-button:hover{
+    color: rgb(252, 206, 1);
+    background-color:rgba(117, 5, 5, 0.582);
+    border-color:rgba(78, 185, 7, 0.651);
+    border-inline-color: rgb(252, 206, 1);
 }
 
 .sibebar-wrapper .sidebar-item .car-button.is-focused{
@@ -391,7 +398,10 @@ animation: bounce-in .5s reverse;
     border-bottom: 1px solid #7a7a7b;
 }
 
-
+.sidebar-menu .sidebar-menu-item:hover {
+    background-color:rgba(219, 194, 81, 0.404);
+    border-bottom: 1px solid #8d7f6d;
+}
 .navbar .icon {
     position: absolute;
     right: 0;
