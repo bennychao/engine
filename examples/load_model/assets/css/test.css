@@ -97,6 +97,25 @@ ul, li, em, p, dd, dt, dl, ol, h1, h2, h3, h4, h5, h6 {
 }
 
 
+.navigator-closed-btns-enter-active {
+    animation: bounce-in .5s;
+}
+.navigator-closed-btns-leave-active {
+animation: bounce-in .5s reverse;
+}
+
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .navigator-container .navigator-closed-btns .closed-btn {
     position: relative;
     width: 100%;
