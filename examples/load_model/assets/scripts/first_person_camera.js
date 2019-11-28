@@ -56,6 +56,8 @@ FirstPersonCamera.prototype.initialize = function () {
     //find the obstacle
     this.loadObstacles();
     
+    this.obstacle = null;
+    
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
@@ -290,12 +292,12 @@ FirstPersonCamera.prototype.loadObstacles = function () {
         if (node.collision.type == "box"){
             
             var box = new pc.BoundingBox(node.getPosition(), node.collision.halfExtents);
-            this.obstacleList.push(box);
+            this.obstacleList.push({bounding:box, node:node});
         }
         else  if (node.collision.type == "sphere"){
             
             var sphere = new pc.BoundingSphere(node.getPosition(), node.collision.halfExtents.x);
-            this.obstacleList.push(sphere);
+            this.obstacleList.push({bounding:sphere, node:node});
         }
     
     }); 
@@ -304,7 +306,15 @@ FirstPersonCamera.prototype.loadObstacles = function () {
 
 FirstPersonCamera.prototype.checkObstacle = function (vec) {
     var obs = this.obstacleList.filter(function(ob) {
-        return ob.containsPoint(vec);
+        
+        ob.node.fire("onCollisionEnter");
+        if (this.obstacle != ob.node)
+        {
+            ob.node.fire("onCollisionLeave");
+            this.obstacle = ob.node;
+        }
+        
+        return ob.bounding.containsPoint(vec);
     });
     return obs.size() > 0;
 };
