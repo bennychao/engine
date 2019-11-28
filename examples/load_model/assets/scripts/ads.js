@@ -8,6 +8,7 @@ Ads.attributes.add('speed', {
     type: 'vec2'
 });
 
+ Ads.tmp = new pc.Vec2();
 
 // initialize code called once per entity
 Ads.prototype.initialize = function() {

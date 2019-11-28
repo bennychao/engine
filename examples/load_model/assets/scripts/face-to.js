@@ -1,4 +1,4 @@
-var FaceTo = pc.createScript('face-to');
+var FaceTo = pc.createScript('faceTo');
 
 // initialize code called once per entity
 FaceTo.prototype.initialize = function() {
@@ -6,8 +6,8 @@ FaceTo.prototype.initialize = function() {
         return node.camera; // player
     });
     this.camera = cameras[0];
-    this.entity.on("onCollisionEnter", onEnter);
-    this.entity.on("onCollisionLeave", onLeave);
+    this.entity.on("onCollisionEnter", this.onEnter);
+    this.entity.on("onCollisionLeave", this.onLeave);
 };
 
 // update code called every frame

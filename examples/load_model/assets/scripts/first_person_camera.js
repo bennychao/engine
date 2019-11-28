@@ -19,6 +19,8 @@ FirstPersonCamera.attributes.add('ground', {
 FirstPersonCamera.prototype.initialize = function () {
     // Camera euler angle rotation around x and y axes
     var eulers = this.entity.getLocalEulerAngles();
+    
+    
     this.ex = eulers.x;
     this.ey = eulers.y;
     this.force = new pc.Vec3();
@@ -256,9 +258,9 @@ FirstPersonCamera.prototype.moveTo = function (target) {
         if (t.lengthSq() < 0.5 || cur.checkObstacle())
             {
                 cur.off("onUpdate");
-                this.bTargeting = false;
-                this.force.x = 0;
-                this.force.z = 0;
+                cur.bTargeting = false;
+                cur.force.x = 0;
+                cur.force.z = 0;
                // this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
                // this.force.z = pc.math.lerp(this.force.z, 0, 0.1);
             }
@@ -268,8 +270,8 @@ FirstPersonCamera.prototype.moveTo = function (target) {
 
                 t.scale(cur.speed);
 
-                this.force.x = pc.math.lerp(this.force.x, t.x, 0.1);
-                this.force.z = pc.math.lerp(this.force.z, t.z, 0.1);
+                cur.force.x = pc.math.lerp(cur.force.x, t.x, 0.1);
+                cur.force.z = pc.math.lerp(cur.force.z, t.z, 0.1);
             }
 
         
@@ -287,17 +289,19 @@ FirstPersonCamera.prototype.loadObstacles = function () {
         return node.collision && !node.tags.has('ground'); // player
     });
     
+    var cur = this;
+    
     collisions.forEach(function (node){
         
         if (node.collision.type == "box"){
             
             var box = new pc.BoundingBox(node.getPosition(), node.collision.halfExtents);
-            this.obstacleList.push({bounding:box, node:node});
+            cur.obstacleList.push({bounding:box, node:node});
         }
         else  if (node.collision.type == "sphere"){
             
             var sphere = new pc.BoundingSphere(node.getPosition(), node.collision.halfExtents.x);
-            this.obstacleList.push({bounding:sphere, node:node});
+            cur.obstacleList.push({bounding:sphere, node:node});
         }
     
     }); 
@@ -305,13 +309,15 @@ FirstPersonCamera.prototype.loadObstacles = function () {
 
 
 FirstPersonCamera.prototype.checkObstacle = function (vec) {
+    
+    var cur = this;
     var obs = this.obstacleList.filter(function(ob) {
         
         ob.node.fire("onCollisionEnter");
-        if (this.obstacle != ob.node)
+        if (cur.obstacle != ob.node)
         {
             ob.node.fire("onCollisionLeave");
-            this.obstacle = ob.node;
+            cur.obstacle = ob.node;
         }
         if (node.tags.has('trigger'))
             {
