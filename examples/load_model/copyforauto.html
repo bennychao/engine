@@ -18,6 +18,14 @@
 
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
 
+    <div id="application-splash-wrapper">
+        <div id="application-splash" v-show="show"><img
+                src="https://s3-eu-west-1.amazonaws.com/static.playcanvas.com/images/play_text_252_white.png">
+            <div id="progress-bar-container">
+                <div id="progress-bar" v-bind:style="{width: progress + '%' }"></div>
+            </div>
+        </div>
+    </div>
 
     <!--  -->
     <div id="container" > 

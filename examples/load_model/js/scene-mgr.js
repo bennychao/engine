@@ -1,6 +1,12 @@
 const prefabs = {}
 
-
+var splash = new Vue({
+    el: '#application-splash',
+    data: {
+      show : true,
+      progress: 30
+    }
+  });
 
 Object.assign(pc, function () {
 
@@ -30,6 +36,15 @@ Object.assign(pc, function () {
             
                 response.forEach(element => {
                     cur.loadAsset(element);
+                });
+
+                var offset = 70  / response.length;
+                app.assets._assets.on("load", function(){
+    
+                    splash.progress += offset;
+
+                    if (splash.progress > 100)
+                        splash.progress = 100;
                 });
 
                 //cur.startLoadAsset("material", response);

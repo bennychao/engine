@@ -397,3 +397,11 @@ var tabs = new Vue(
   });
 
 
+  var splash = new Vue({
+    el: '#application-splash',
+    data: {
+      show : true,
+      progress: 90
+    }
+  });
+

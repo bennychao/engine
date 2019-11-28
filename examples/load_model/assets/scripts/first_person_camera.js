@@ -313,7 +313,10 @@ FirstPersonCamera.prototype.checkObstacle = function (vec) {
             ob.node.fire("onCollisionLeave");
             this.obstacle = ob.node;
         }
-        
+        if (node.tags.has('trigger'))
+            {
+                return false;
+            }
         return ob.bounding.containsPoint(vec);
     });
     return obs.size() > 0;
