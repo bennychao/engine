@@ -1,8 +1,6 @@
 var Ui = pc.createScript('ui');
 
 
-
-
 Ui.attributes.add('css', {type: 'asset', assetType:'css', title: 'CSS Asset'});
 Ui.attributes.add('html', {type: 'asset', assetType:'html', title: 'HTML Asset'});
 
@@ -179,23 +177,48 @@ Ui.prototype.bindEvents = function() {
 
 Ui.prototype.calculateElementPos = function(el) {
     if (el.entity.parent.screen){
+        var w = (el.anchor.z - el.anchor.x) * el.entity.parent.screen.resolution.x;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * el.entity.parent.screen.resolution.y;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
         //anchor(x,y,z,w) = left, bottom, right and top , (0,0) left/bottom
         var ret = new pc.Vec4(el.anchor.x * el.entity.parent.screen.resolution.x,
                               
                               (1 - el.anchor.w) * el.entity.parent.screen.resolution.y,
                              
-                              (el.anchor.z - el.anchor.x) * el.entity.parent.screen.resolution.x,  //width
-                              (el.anchor.w - el.anchor.y) * el.entity.parent.screen.resolution.y);    //height
+                              w ,  //width
+                              h);    //height
         return ret;
     }
     else if (el.entity.parent.element)
     {
         var retParent = this.calculateElementPos(el.entity.parent.element);
         
+        var w = (el.anchor.z - el.anchor.x)* retParent.z;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * retParent.w;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
+        
         var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x,  
                               (1 - el.anchor.w) * retParent.w + retParent.y,
-                              (el.anchor.z - el.anchor.x) * retParent.z,
-                              (el.anchor.w - el.anchor.y) * retParent.w
+                              w ,
+                              h
                              );
         
 
