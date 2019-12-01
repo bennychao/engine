@@ -22,6 +22,12 @@ Ui.attributes.add('ifBind', {
     default: false
 });
 
+Ui.attributes.add('ifAutoBindAsset', {
+    type: 'boolean',
+    title: 'ifAutoBindAsset',
+    default: true
+});
+
 Ui.attributes.add('ifSupportZ', {
     type: 'boolean',
     title: 'ifSupportZ',
@@ -40,8 +46,17 @@ Ui.attributes.add('farZ', {
     default: 10
 });
 
+Ui.prototype.initialize = function (){
+    if (this.ifAutoBindAsset){
+        this.bindAssets();
+    }
+    
+    this.entity.on("bind", this.bindAssets, this);
+    this.entity.on("changeData", this.changeData, this);
+};
 
-Ui.prototype.initialize = function () {
+
+Ui.prototype.bindAssets = function () {
     // create STYLE element
     var style = document.createElement('style');
 
@@ -96,7 +111,8 @@ Ui.prototype.initialize = function () {
             posY: 100,
             posZ: 1,
             width: 100,
-            height: 60
+            height: 60,
+            string: "1.1w"
         }
       });
     
@@ -124,7 +140,7 @@ Ui.prototype.update = function(dt) {
 };
 
 Ui.prototype.updateUIPos = function() {
-    if (this.entity.element) 
+    if (this.entity.element && this.uiItem !== undefined) 
     {
         var ret =this.calculateElementPos(this.entity.element);
         
@@ -174,6 +190,9 @@ Ui.prototype.bindEvents = function() {
     //try to VUE bind(in my loader)
 };
 
+Ui.prototype.changeData = function(data) {
+    this.uiItem.string = data;
+};
 
 Ui.prototype.calculateElementPos = function(el) {
     if (el.entity.parent.screen){
@@ -214,8 +233,13 @@ Ui.prototype.calculateElementPos = function(el) {
             h = el.height;
         }
         
+        var offsetX = 0;
         
-        var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x,  
+        if (el.entity.tags.has("followable")){
+            offsetX = el.entity.getLocalPosition().x;
+        }
+        
+        var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x + offsetX,  
                               (1 - el.anchor.w) * retParent.w + retParent.y,
                               w ,
                               h

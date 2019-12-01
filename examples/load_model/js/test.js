@@ -314,6 +314,21 @@ var tabs = new Vue(
   //   }
   // });
 
+  
+var DoT = function (length) {
+  this.length = length;
+  this.count = 0;
+
+  this.inc = function () {
+      this.count++;
+  };
+
+  this.done = function () {
+      return (this.count === this.length);
+  };
+};
+
+
   var navOpened = new Vue({
     el: '#nav-opened',
     data: {

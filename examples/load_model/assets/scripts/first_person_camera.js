@@ -50,7 +50,7 @@ FirstPersonCamera.prototype.initialize = function () {
     this.entity.setPosition(pos);
     
     this.bMouseDown = false;
-    
+      
     var size = this.ground.getLocalScale().clone();
         //check is in Box
     this.broundbox = new pc.BoundingBox(this.ground.getPosition(), size.scale(0.5));
@@ -60,6 +60,12 @@ FirstPersonCamera.prototype.initialize = function () {
     
     this.obstacle = null;
     
+    this.InitCheckUIList();
+    
+    
+    this.entity.on("faceTo", this.faceTo);
+    
+    this.checkSwithToCar();
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
@@ -102,10 +108,10 @@ FirstPersonCamera.prototype.update = function (dt) {
 FirstPersonCamera.prototype.checkMouseMove = function (event) {
     // Update the current Euler angles, clamp the pitch.
     // calculate force based on pressed keys
-    if (this.app.keyboard.isPressed(pc.KEY_LEFT)) {
+    if (this.app.keyboard.isPressed(pc.KEY_LEFT) || this.app.keyboard.isPressed(pc.KEY_A)) {
         this.force.x = pc.math.lerp(this.force.x, -this.speed, 0.01);
     } 
-    else if (this.app.keyboard.isPressed(pc.KEY_RIGHT)) {
+    else if (this.app.keyboard.isPressed(pc.KEY_RIGHT) || this.app.keyboard.isPressed(pc.KEY_D)) {
         this.force.x = pc.math.lerp(this.force.x, this.speed, 0.01);
     }
     else
@@ -113,10 +119,10 @@ FirstPersonCamera.prototype.checkMouseMove = function (event) {
         this.force.x = pc.math.lerp(this.force.x, 0, 0.1);
     }
 
-    if (this.app.keyboard.isPressed(pc.KEY_UP)) {
+    if (this.app.keyboard.isPressed(pc.KEY_UP) || this.app.keyboard.isPressed(pc.KEY_W)) {
         this.force.z = pc.math.lerp(this.force.z, -this.speed, 0.01);
     } 
-    else if (this.app.keyboard.isPressed(pc.KEY_DOWN)) {
+    else if (this.app.keyboard.isPressed(pc.KEY_DOWN) || this.app.keyboard.isPressed(pc.KEY_S)) {
         this.force.z = pc.math.lerp(this.force.z, this.speed, 0.01);
     }
     else
@@ -137,7 +143,7 @@ FirstPersonCamera.prototype.onMouseMove = function (event) {
 
 FirstPersonCamera.prototype.onMouseDown = function (event) {
     // When the mouse button is clicked try and capture the pointer
-    if (!this.bSteering && !this.bTargeting && !this.bMouseDown) {  // && !pc.Mouse.isPointerLocked()
+    if (!this.bSteering && !this.bTargeting && !this.bMouseDown && !this.checkClickInUI(new pc.Vec2(event.x, event.y))) {  // && !pc.Mouse.isPointerLocked()
         //this.app.mouse.enablePointerLock();
         this.bMouseDown = true;
         this.startPos = new pc.Vec2(event.x, event.y);
@@ -183,10 +189,10 @@ FirstPersonCamera.prototype.onSteer = function (curDir) {
 FirstPersonCamera.prototype.faceTo = function (target) {
     //this.bSteering = true;
     //target is a entity
-    var dir = this.target.forward.clone();
-    dir.scale(1);
+    var dir = target.forward.clone();
+    dir.scale(3);
     
-    var pos = this.target.getPosition();
+    var pos = target.getPosition().clone();
     
     pos.add(dir);
     
@@ -194,9 +200,24 @@ FirstPersonCamera.prototype.faceTo = function (target) {
     
     this.entity.setPosition(pos);
     
-    pos = this.target.getPosition();
+    pos = target.getPosition();
     
     this.entity.lookAt(pos);
+    //this.entity.rotate(0, 180, 0);
+};
+
+
+FirstPersonCamera.prototype.checkSwithToCar = function () {
+
+    var target = getQueryVariable("car");
+    if (target){
+        //switch the camera pos to face to it
+        
+        var carTarget = this.app.root.findByName(target);
+        
+
+        this.faceTo(carTarget);
+    }
 };
 
 FirstPersonCamera.prototype.checkRay = function (event) {
@@ -338,3 +359,88 @@ FirstPersonCamera.prototype.angle = function (v1, v2) {
     
     return d;
 };
+
+
+//for check click in UI Items
+FirstPersonCamera.prototype.InitCheckUIList = function (pos) {
+    
+    this.uiItemsList = new Array();
+    
+    var uis = this.app.root.find(function(node) {
+        return node.tags.has('mainUI'); // player
+    });
+    this.mainUI = uis[0];
+    
+    this.inputs = this.mainUI.children.filter(function(node) {
+        return node.element && node.element.useInput; // player
+    });
+    
+    
+    //return false;   
+};
+
+FirstPersonCamera.prototype.checkClickInUI = function (pos) {   
+    
+    var cur = this;
+    var node = this.inputs.find(function (node){
+       
+        var rect = cur.calculateElementPos(node.element);
+        
+        return pos.x > rect.x && pos.y > rect.y && (rect.x + rect.z) > pos.x && (rect.y + rect.w) > pos.y;
+    });
+    
+    return node !== null && node !== undefined;
+};
+
+FirstPersonCamera.prototype.calculateElementPos = function(el) {
+    if (el.entity.parent.screen){
+        var w = (el.anchor.z - el.anchor.x) * el.entity.parent.screen.resolution.x;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * el.entity.parent.screen.resolution.y;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
+        //anchor(x,y,z,w) = left, bottom, right and top , (0,0) left/bottom
+        var ret = new pc.Vec4(el.anchor.x * el.entity.parent.screen.resolution.x,
+                              
+                              (1 - el.anchor.w) * el.entity.parent.screen.resolution.y,
+                             
+                              w ,  //width
+                              h);    //height
+        return ret;
+    }
+    else if (el.entity.parent.element)
+    {
+        var retParent = this.calculateElementPos(el.entity.parent.element);
+        
+        var w = (el.anchor.z - el.anchor.x)* retParent.z;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * retParent.w;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
+        
+        var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x,  
+                              (1 - el.anchor.w) * retParent.w + retParent.y,
+                              w ,
+                              h
+                             );
+        
+
+        
+        return ret;
+    }
+};
+

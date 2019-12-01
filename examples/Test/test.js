@@ -1,6 +1,27 @@
 
 
 
+let position = { x: 0 }
+
+const tweenA = new TWEEN.Tween(position).to({ x: 500 }, 1000).onUpdate(function(){
+
+    //div.style.left = position.x +'px'
+    console.log("test");
+
+}).start();
+
+
+function animate(){ 
+
+    requestAnimationFrame(animate); // requestAnimationFrame可以看成setTimeout(animate, 17)
+
+    TWEEN.update(); // 每隔一段时间，update方法会调用上面的onUpdate函数，这样让left变化，小球位置也变化
+
+ }
+
+ animate();
+ 
+
 var v =new Vue({
     el: '#app',
     data: {

@@ -1,5 +1,7 @@
 const prefabs = {}
 
+
+
 var splash = new Vue({
     el: '#application-splash',
     data: {
@@ -245,6 +247,15 @@ Object.assign(pc, function () {
             {
                 var asset = new pc.Asset(item.name, item.type, 
                     {url: "./assets/images/"+ item.name, preload:true});
+
+                asset.id = item.id;
+                asset.preload = true;
+                app.assets.add(asset);
+            }
+            else if (item.type == "mp3")
+            {
+                var asset = new pc.Asset(item.name, item.type, 
+                    {url: "./assets/mv/"+ item.name, preload:true});
 
                 asset.id = item.id;
                 asset.preload = true;
