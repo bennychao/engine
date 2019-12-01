@@ -37,6 +37,10 @@ function getQueryVariable(variable) {
 }
 
 
+//assets mgr
+
+
+
 //global data
 var cars = [
     {
@@ -193,6 +197,34 @@ MainScene.prototype.loadScene = function (id, callback) {
             console.error (err);
         }
     });
+};
+
+MainScene.prototype.loadAsset = function (name, type, callback) {
+    
+    var asset = app.assets.find(name, type);
+    
+    if (asset){
+        if (callback){
+            callback(asset);
+            
+            return;
+        }
+    }
+    
+    if (type == "texture"){
+        url = "./assets/images/" + name;
+    }
+    else if (type == "css"){
+        url = "./assets/css/" + name;
+    }
+    
+    this.app.assets.loadFromUrl(url, type, function(err, asset){
+        if (callback){
+            callback(asset);
+        }
+    });
+    
+    return;
 };
 
 
