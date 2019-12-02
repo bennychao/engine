@@ -26,10 +26,7 @@ CarController.prototype.initialize = function () {
     }
     
     
-    //check the system buttons' function
-    //
     
-
 };
 
 
@@ -51,10 +48,19 @@ CarController.prototype.initCarDetailUIs = function (dt) {
 
     var rect = calculateElementPos(this.carDetailUI.element);
     
-    this.curDetailUIHeight = rect.w;  
-
-    var itemWidth = 100;
-    var itemsWidth = itemWidth * cars.length;
+    
+    var newH = rect.z * 0.2;
+    
+    this.curDetailUIHeight = newH;
+    
+    var screenH = this.entity.screen.resolution.y;
+    //left, bottom, right and top
+    //set the Vec4 anchor 's top
+    
+    var an = this.carDetailUI.element.achor.clone();
+    
+    an.top = an.bottom -  (newH / screenH);
+    
 
     setTimeout(function () {
         //wait for the children have init end
@@ -82,14 +88,19 @@ CarController.prototype.onClickDetail = function (btn){
            switch (btn.name){
            case "Item1":
                //switch Scene
-               singleMainScene.loadScene(838927, null);
+               singleMainScene.loadScene(SubSceneId, null);
                break;
-           case "Item2":
+           case "Item2": 
+               //change color
+               this.showChangeColorUI();
+                   
                break;
            case "Item3":
                break;
+                   
            case "Item4":
-               break;   
+               break;
+                   
            case "Item5":
                break;               
        } 
@@ -117,8 +128,10 @@ CarController.prototype.initCarNavUIs = function (dt) {
 
     this.curNavUIHeight = rect.w;
 
-    var itemWidth = 100;
+    var itemWidth =  this.curDetailUIHeight * 1; //TODO ratio
     var itemsWidth = itemWidth * cars.length;
+    
+    content.element.width = itemsWidth;
 
     //left scroll the content
     var rButton = this.carNavPanel.findByName("RButton");
@@ -249,7 +262,98 @@ CarController.prototype.hideCarsDetail = function () {
         .start();
 };
 
+////// change color panel
+CarController.prototype.showChangeColorUI = function () {
+    
+    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    
+    var rect = calculateElementPos(colorPanel);
+    
+    var formY = - rect.w;// - this.curUIHeight;
+    var position = { y: formY };
 
+    var pos = colorPanel.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: 0 }, 300)
+        .onStart(function () {
+            colorPanel.enabled = true;
+            //register button click
+            enableHandleChangeColor();
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            colorPanel.setLocalPosition(pos);
+        })
+        .onStop(function () {
+
+        })
+        .start();
+};
+
+
+CarController.prototype.hideChangeColorUI = function () {
+    
+    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    
+    var rect = calculateElementPos(colorPanel);
+    
+    var formY = 0;// - this.curUIHeight;
+    var position = { y: formY };
+
+    var pos = colorPanel.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: - rect.w }, 300)
+        .onStart(function () {
+           //colorPanel.off();
+           disableHandleChangeColor();
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            colorPanel.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            colorPanel.enabled = false;
+        })
+        .start();
+};
+
+CarController.prototype.enableHandleChangeColor = function () {
+    
+    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    
+    this.buttons = colorPanel.find(function (node){
+        return node.script && node.script.has('imgButton'); // player
+    });
+    
+    var cur = this;
+    this.buttons.forEach(function (btn){
+        
+        btn.on("click", function(bDl){
+            //do nothing
+            cur.hideChangeColorUI();
+        });
+
+    });
+};
+
+
+CarController.prototype.disableHandleChangeColor = function () {
+    
+    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    
+    this.buttons = colorPanel.find(function (node){
+        return node.script && node.script.has('imgButton'); // player
+    });
+    
+    var cur = this;
+    this.buttons.forEach(function (btn){
+        
+        btn.off();
+
+    });
+};
 
 // swap method called for script hot-reloading
 // inherit your script state here

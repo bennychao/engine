@@ -44,6 +44,40 @@ Car.prototype.initialize = function() {
         var asset = cur.app.assets.find(node.tex);
         cur.texs.push({asset:asset, angle:node.angle});
     });
+    
+    var carConfig = cars.find(function (c){
+        return c.name == cur.entity.name;
+    });
+    
+    
+    //set the Car image and logo
+    var img = this.entity.findByName("image"); //for car's image id
+    
+    if (img){
+        singleMainScene.getAsset(carConfig.image, "texture", function(asset){
+            var material = new pc.StandardMaterial();
+            material.diffuseMap = asset.resource;
+            //material.diffuse = new pc.Color(1,1,0);
+            material.update();  
+
+            img.model.model.meshInstances[0].material = material;
+        });
+    
+    }
+
+    var logo = this.entity.findByName("logo"); //for car's image id
+    
+    if (logo){
+        singleMainScene.getAsset(carConfig.logo, "texture", function(asset){
+            var material = new pc.StandardMaterial();
+            material.diffuseMap = asset.resource;
+            //material.diffuse = new pc.Color(1,1,0);
+            material.update();  
+
+            logo.model.model.meshInstances[0].material = material;
+        });
+    
+    }
 };
 
 // update code called every frame

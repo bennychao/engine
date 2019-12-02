@@ -1,4 +1,7 @@
 
+var MainSceneId = 831774;
+var SubSceneId = 838927;
+
 //car'panel's anim and control function
 
 function animate() {
@@ -46,39 +49,63 @@ var cars = [
     {
         name: "Car1",
         count: "1.1w",
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
         pos: {x:1, y:0, z:1}
     },
     {
-        name: "Ca2",
+        name: "Car2",
         count: "1.1w",
+        
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
         pos: {x:3, y:0, z:1}
-    },
-    {
-        name: "Car1",
-        count: "1.1w",
-        pos: {x:4, y:0, z:1}
     },
     {
         name: "Car3",
         count: "1.1w",
-        pos: {x:5, y:0, z:1}
+        
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
+        pos: {x:4, y:0, z:1}
     },
     {
         name: "Car4",
         count: "1.1w",
-        pos: {x:6, y:0, z:1}
+        
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
+        pos: {x:5, y:0, z:1}
     },
 
     {
         name: "Car5",
         count: "1.1w",
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
         pos: {x:7, y:0, z:1}
     },     
     {
         name: "Car6",
         count: "1.1w",
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
         pos: {x:8, y:0, z:1}
-    }
+    },
+    {
+        name: "Car7",
+        count: "1.1w",
+        model:"Car1",
+        logo:"logo.png",
+        image:"image.png",
+        pos: {x:6, y:0, z:1}
+    },
 ];    
 
 var singleMainScene = null;
@@ -116,6 +143,45 @@ MainScene.prototype.initialize = function() {
     }, 100);
     //check if show the hint UI
     singleMainScene = this;
+    
+        //check the system buttons' function
+    //
+    
+    this.ExitBtn = this.entity.findByName("Exit");
+    if (this.ExitBtn){
+        this.ExitBtn.on("click", function(e){
+            
+        });
+    }
+    
+    this.ShareBtn = this.entity.findByName("Share");
+    if (this.ShareBtn){
+        this.ShareBtn.on("click", function(e){
+            
+        });
+    }
+    
+    this.ReturnBtn = this.entity.findByName("Return");
+    if (this.ReturnBtn){
+        this.ReturnBtn.on("click", function(e){
+            singleMainScene.loadScene(MainSceneId, null);
+        });
+    }
+    
+    this.bMute = false;
+    this.MuteBtn = this.entity.findByName("Sound");
+    if (this.MuteBtn){
+        this.MuteBtn.on("click", function(e){
+            //TODO change the pic
+            cur.bMute = !this.bMute;
+            cur.Mute(cur.bMute);
+        });
+    }
+    
+    
+
+    this.loadCars();
+    
 };
 
 // update code called every frame
@@ -139,6 +205,33 @@ MainScene.prototype.checkSwithToCar = function () {
     }
 };
 */
+
+
+// update code called every frame
+MainScene.prototype.loadCars = function(dt) {
+        //init the cars
+    var carTemplate = this.entity.findByName("Car1");
+    
+    if (!carTemplate)
+        return;
+    
+    var cur = this;
+    let promise = new Promise(function(resolve, reject){
+
+        cars.forEach(function (c){
+            var tt = carTemplate.clone();
+
+            tt.name = c.name;
+
+            tt.setLocalPosition(c.pos);
+
+            cur.app.root.addChild(tt);
+        });
+
+        carTemplate.enabled = false; 
+        resolve();
+    });
+};
 
 MainScene.prototype.disableInput = function () {
 
@@ -199,11 +292,12 @@ MainScene.prototype.loadScene = function (id, callback) {
     });
 };
 
-MainScene.prototype.loadAsset = function (name, type, callback) {
+MainScene.prototype.getAsset = function (name, type, callback) {
     
     var asset = app.assets.find(name, type);
     
-    if (asset){
+    if (asset && asset.loaded){    
+        
         if (callback){
             callback(asset);
             
@@ -211,6 +305,15 @@ MainScene.prototype.loadAsset = function (name, type, callback) {
         }
     }
     
+    if (asset && !asset.loaded){
+        asset.on("load", function(asset){
+            if (callback){
+                callback(asset);
+            }
+        });
+    }
+    
+    //load form URL
     if (type == "texture"){
         url = "./assets/images/" + name;
     }
@@ -227,6 +330,39 @@ MainScene.prototype.loadAsset = function (name, type, callback) {
     return;
 };
 
+
+MainScene.prototype.Mute = function(bMute) {
+    if (bMute){
+        var muteImg = this.getAsset("voice-off.png", "texture", function(asset){
+            
+            this.MuteBtn.element.textureAsset = asset;
+
+            var sounds = this.app.root.find(function(node) {
+                return node.sound;
+            });
+
+            sounds.forEach(function(node){
+               node.sound.stop(); 
+            });
+        });
+
+    }
+    else{
+        var muteImg = this.getAsset("voice-on.png", "texture", function(asset){
+            this.MuteBtn.element.textureAsset = muteImg;
+        
+            var sounds = this.app.root.find(function(node) {
+                return node.sound;
+            });
+
+            sounds.forEach(function(node){
+               node.sound.play(); 
+            });
+        });
+
+    }
+
+};
 
 // swap method called for script hot-reloading
 // inherit your script state here

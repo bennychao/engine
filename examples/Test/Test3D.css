@@ -41,3 +41,41 @@
     display: table-cell;
     vertical-align:middle;
 }
+
+
+
+
+
+.share-container li{
+    position: relative;
+    float: left;
+    width: 23px;
+    height: 23px;
+    margin-left: 5px;
+    margin-top: 20px;
+    }
+
+    .share-container li a{
+    display: inline-block;
+    width: 100%;
+    height: 23px;
+    }
+    .share-container li a img{
+    width: 100%;
+    }
+    .wechat-share{
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 128px;
+    height: 128px;
+    overflow: hidden;
+    z-index: 9;
+    }
+    .bds_weixin:hover ~ .wechat-share{
+    display: block;
+    }
+    .wechat-share img{
+    width: 100%;
+    }
