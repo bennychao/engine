@@ -16,3 +16,23 @@ var v =new Vue({
   　　    }
       }
   });
+
+
+
+//   var position = { y: formY };
+
+//   var pos = this.carNavPanel.getLocalPosition();
+
+//   var cur = this;
+//   var tweenA = new TWEEN.Tween(position).to({ y: this.carNavPosY - this.curNavUIHeight }, 300)
+//       .onStart(function () {
+
+//       })
+//       .onUpdate(function () {
+//           pos.y = position.y;
+//           cur.carNavPanel.setLocalPosition(pos);
+//       })
+//       .onStop(function () {
+//           cur.carNavPanel.enabled = false;
+//       })
+//       .start();
