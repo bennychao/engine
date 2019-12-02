@@ -1,3 +1,62 @@
+
+//common function
+var calculateElementPos = function(el) {
+    if (el.entity.parent.screen){
+        var w = (el.anchor.z - el.anchor.x) * el.entity.parent.screen.resolution.x;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * el.entity.parent.screen.resolution.y;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
+        //anchor(x,y,z,w) = left, bottom, right and top , (0,0) left/bottom
+        var ret = new pc.Vec4(el.anchor.x * el.entity.parent.screen.resolution.x,
+                              
+                              (1 - el.anchor.w) * el.entity.parent.screen.resolution.y,
+                             
+                              w ,  //width
+                              h);    //height
+        return ret;
+    }
+    else if (el.entity.parent.element)
+    {
+        var retParent = calculateElementPos(el.entity.parent.element);
+        
+        var w = (el.anchor.z - el.anchor.x)* retParent.z;
+        if (w <= 0)
+        {
+            w = el.width;
+        }
+        
+        var h = (el.anchor.w - el.anchor.y) * retParent.w;
+        if (h <= 0)
+        {
+            h = el.height;
+        }
+        
+        var offsetX = 0;
+        
+        if (el.entity.tags.has("followable")){
+            offsetX = el.entity.getLocalPosition().x;
+        }
+        
+        var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x + offsetX,  
+                              (1 - el.anchor.w) * retParent.w + retParent.y,
+                              w ,
+                              h
+                             );
+        
+
+        
+        return ret;
+    }
+};
+
 var Ui = pc.createScript('ui');
 
 
@@ -40,7 +99,7 @@ Ui.attributes.add('nearZ', {
     default: 0
 });
 
-Ui.attributes.add('farZ', {
+Ui.attributes.add('farZ', { 
     type: 'number',
     title: 'maxZ',
     default: 10
@@ -53,6 +112,17 @@ Ui.prototype.initialize = function (){
     
     this.entity.on("bind", this.bindAssets, this);
     this.entity.on("changeData", this.changeData, this);
+    
+    var cur = this;
+    this.entity.on("destroy", function(e){
+        //document.body.appendChild(this.div);
+        if (cur.div) 
+        {
+            var self = document.getElementById('uiItem_' + e.name);
+            document.body.removeChild(self);
+            //cur.div.remove();
+        }
+    });
 };
 
 
@@ -142,7 +212,7 @@ Ui.prototype.update = function(dt) {
 Ui.prototype.updateUIPos = function() {
     if (this.entity.element && this.uiItem !== undefined) 
     {
-        var ret =this.calculateElementPos(this.entity.element);
+        var ret =calculateElementPos(this.entity.element);
         
         this.uiItem.posX = ret.x;
         this.uiItem.posY = ret.y;
@@ -194,59 +264,3 @@ Ui.prototype.changeData = function(data) {
     this.uiItem.string = data;
 };
 
-Ui.prototype.calculateElementPos = function(el) {
-    if (el.entity.parent.screen){
-        var w = (el.anchor.z - el.anchor.x) * el.entity.parent.screen.resolution.x;
-        if (w <= 0)
-        {
-            w = el.width;
-        }
-        
-        var h = (el.anchor.w - el.anchor.y) * el.entity.parent.screen.resolution.y;
-        if (h <= 0)
-        {
-            h = el.height;
-        }
-        
-        //anchor(x,y,z,w) = left, bottom, right and top , (0,0) left/bottom
-        var ret = new pc.Vec4(el.anchor.x * el.entity.parent.screen.resolution.x,
-                              
-                              (1 - el.anchor.w) * el.entity.parent.screen.resolution.y,
-                             
-                              w ,  //width
-                              h);    //height
-        return ret;
-    }
-    else if (el.entity.parent.element)
-    {
-        var retParent = this.calculateElementPos(el.entity.parent.element);
-        
-        var w = (el.anchor.z - el.anchor.x)* retParent.z;
-        if (w <= 0)
-        {
-            w = el.width;
-        }
-        
-        var h = (el.anchor.w - el.anchor.y) * retParent.w;
-        if (h <= 0)
-        {
-            h = el.height;
-        }
-        
-        var offsetX = 0;
-        
-        if (el.entity.tags.has("followable")){
-            offsetX = el.entity.getLocalPosition().x;
-        }
-        
-        var ret = new pc.Vec4(el.anchor.x * retParent.z + retParent.x + offsetX,  
-                              (1 - el.anchor.w) * retParent.w + retParent.y,
-                              w ,
-                              h
-                             );
-        
-
-        
-        return ret;
-    }
-};

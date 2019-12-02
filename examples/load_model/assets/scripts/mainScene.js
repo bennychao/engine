@@ -49,7 +49,7 @@ var cars = [
     {
         name: "Car1",
         count: "1.1w",
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:1, y:0, z:1}
@@ -58,7 +58,7 @@ var cars = [
         name: "Car2",
         count: "1.1w",
         
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:3, y:0, z:1}
@@ -67,7 +67,7 @@ var cars = [
         name: "Car3",
         count: "1.1w",
         
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:4, y:0, z:1}
@@ -76,7 +76,7 @@ var cars = [
         name: "Car4",
         count: "1.1w",
         
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:5, y:0, z:1}
@@ -85,7 +85,7 @@ var cars = [
     {
         name: "Car5",
         count: "1.1w",
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:7, y:0, z:1}
@@ -93,7 +93,7 @@ var cars = [
     {
         name: "Car6",
         count: "1.1w",
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:8, y:0, z:1}
@@ -101,7 +101,7 @@ var cars = [
     {
         name: "Car7",
         count: "1.1w",
-        model:"Car1",
+        model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
         pos: {x:6, y:0, z:1}
@@ -173,7 +173,7 @@ MainScene.prototype.initialize = function() {
     if (this.MuteBtn){
         this.MuteBtn.on("click", function(e){
             //TODO change the pic
-            cur.bMute = !this.bMute;
+            cur.bMute = !cur.bMute;
             cur.Mute(cur.bMute);
         });
     }
@@ -219,18 +219,77 @@ MainScene.prototype.loadCars = function(dt) {
     let promise = new Promise(function(resolve, reject){
 
         cars.forEach(function (c){
-            var tt = carTemplate.clone();
+            
+            cur.loadCarAsset(c, function(){
+                var tt = carTemplate.clone();
 
-            tt.name = c.name;
+                tt.name = c.name;
 
-            tt.setLocalPosition(c.pos);
+                tt.setLocalPosition(c.pos);
 
-            cur.app.root.addChild(tt);
+                cur.app.root.addChild(tt);
+            });
+
         });
 
         carTemplate.enabled = false; 
         resolve();
     });
+};
+
+MainScene.prototype.loadCarAsset = function(car, callback) {
+    //init the cars
+    var urls = new Array();
+    
+    urls.push(car.logo);
+    urls.push(car.image);
+    
+    //preload
+    var modelJsonAsset = this.app.assets.find(car.model, "json");
+    
+    //var carParts = Enumerable.From(modelJsonAsset.resource).Select("x=>x.tex").ToArray();
+    
+    if (modelJsonAsset){
+        modelJsonAsset.resources.forEach(function(part){urls.push(part.tex);});
+    }
+
+    
+    var count = urls.length;
+    
+    var cur = this;
+    urls.forEach(function(url){
+       var asset = cur.app.assets.find(url, "texture");
+        if (asset && asset.loaded){
+            count--;
+            
+            if (count <= 0){
+                callback();
+            }
+        }
+        else if (asset && !asset.loaded){
+            
+            cur.app.assets.load(asset);
+            
+            asset.on("load", function(a){
+               count--; 
+                
+                if (count <= 0){
+                    callback();
+                }
+            });
+        }
+        else{
+            //error//
+            //            
+            count--;
+            
+            if (count <= 0){
+                callback();
+            }
+        }
+        
+    });
+    
 };
 
 MainScene.prototype.disableInput = function () {
@@ -294,7 +353,7 @@ MainScene.prototype.loadScene = function (id, callback) {
 
 MainScene.prototype.getAsset = function (name, type, callback) {
     
-    var asset = app.assets.find(name, type);
+    var asset = this.app.assets.find(name, type);
     
     if (asset && asset.loaded){    
         
@@ -306,11 +365,15 @@ MainScene.prototype.getAsset = function (name, type, callback) {
     }
     
     if (asset && !asset.loaded){
+        
+        this.app.assets.load(asset);
         asset.on("load", function(asset){
             if (callback){
                 callback(asset);
             }
         });
+        
+        return;
     }
     
     //load form URL
@@ -332,12 +395,17 @@ MainScene.prototype.getAsset = function (name, type, callback) {
 
 
 MainScene.prototype.Mute = function(bMute) {
+    
+    var cur = this;
+    
+    //bMute = !bMute;
+    
     if (bMute){
         var muteImg = this.getAsset("voice-off.png", "texture", function(asset){
             
-            this.MuteBtn.element.textureAsset = asset;
+            cur.MuteBtn.element.textureAsset = asset;
 
-            var sounds = this.app.root.find(function(node) {
+            var sounds = cur.app.root.find(function(node) {
                 return node.sound;
             });
 
@@ -349,9 +417,9 @@ MainScene.prototype.Mute = function(bMute) {
     }
     else{
         var muteImg = this.getAsset("voice-on.png", "texture", function(asset){
-            this.MuteBtn.element.textureAsset = muteImg;
+            cur.MuteBtn.element.textureAsset = asset;
         
-            var sounds = this.app.root.find(function(node) {
+            var sounds = cur.app.root.find(function(node) {
                 return node.sound;
             });
 

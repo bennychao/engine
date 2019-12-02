@@ -57,9 +57,9 @@ CarController.prototype.initCarDetailUIs = function (dt) {
     //left, bottom, right and top
     //set the Vec4 anchor 's top
     
-    var an = this.carDetailUI.element.achor.clone();
+    var an = this.carDetailUI.element.anchor.clone();
     
-    an.top = an.bottom -  (newH / screenH);
+    an.w = an.y +  (newH / screenH); 
     
 
     setTimeout(function () {
@@ -128,7 +128,7 @@ CarController.prototype.initCarNavUIs = function (dt) {
 
     this.curNavUIHeight = rect.w;
 
-    var itemWidth =  this.curDetailUIHeight * 1; //TODO ratio
+    var itemWidth =  this.curNavUIHeight * 1; //TODO ratio
     var itemsWidth = itemWidth * cars.length;
     
     content.element.width = itemsWidth;
