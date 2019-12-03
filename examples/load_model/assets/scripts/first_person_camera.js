@@ -66,6 +66,12 @@ FirstPersonCamera.prototype.initialize = function () {
     this.entity.on("faceTo", this.faceTo);
     
     this.checkSwithToCar();
+    
+    //un register the events
+    this.entity.on("destroy", function(){
+        mouse.off();
+        //this.entity.off();
+    });
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
@@ -165,7 +171,7 @@ FirstPersonCamera.prototype.onMouseUp = function (event) {
             console.log("check Ray is " + ret);
             if (ret.bContain)
                 {
-                    //this.moveTo(ret.pos);
+                    this.moveTo(ret.pos);
                 }
         }
     }
@@ -270,13 +276,15 @@ FirstPersonCamera.prototype.moveTo = function (target) {
     var onupdateFunc = function(){     
         
         var t = target.clone();
-        t.y = cur.entity.getPosition().y;
+        t.y = cur.entity.getPosition().y;        
+        var newTarget = t.clone();
+        
         t.sub(cur.entity.getPosition());
         
        //check if stop
         
         //var dis = t.distance(this.entity.getPosition());
-        if (t.lengthSq() < 0.5 || cur.checkObstacle())
+        if (t.lengthSq() < 0.5 || cur.checkObstacle(this.entity.getPosition()))
             {
                 cur.off("onUpdate");
                 cur.bTargeting = false;
@@ -290,9 +298,14 @@ FirstPersonCamera.prototype.moveTo = function (target) {
                 t.normalize(); 
 
                 t.scale(cur.speed);
-
-                cur.force.x = pc.math.lerp(cur.force.x, t.x, 0.1);
-                cur.force.z = pc.math.lerp(cur.force.z, t.z, 0.1);
+                
+                cur.force.x = t.x;
+                cur.force.z = t.z;
+                
+                cur.entity.setPosition(newTarget);
+                
+                // cur.force.x = pc.math.lerp(cur.force.x, t.x, 0.1);
+                // cur.force.z = pc.math.lerp(cur.force.z, t.z, 0.1);
             }
 
         
@@ -332,21 +345,28 @@ FirstPersonCamera.prototype.loadObstacles = function () {
 FirstPersonCamera.prototype.checkObstacle = function (vec) {
     
     var cur = this;
-    var obs = this.obstacleList.filter(function(ob) {
+    var obs = this.obstacleList.find(function(ob) {
         
-        ob.node.fire("onCollisionEnter");
-        if (cur.obstacle != ob.node)
+        //trigger will not stop move
+        if (ob.node.tags.has('trigger'))
         {
-            ob.node.fire("onCollisionLeave");
-            cur.obstacle = ob.node;
+            return false;
         }
-        if (node.tags.has('trigger'))
-            {
-                return false;
-            }
+        
         return ob.bounding.containsPoint(vec);
     });
-    return obs.size() > 0;
+    
+    
+    if (obs && cur.obstacle != obs.node)
+    {
+        if (cur.obstacle){
+            cur.obstacle.fire("onCollisionLeave");
+        }
+
+        obs.node.fire("onCollisionEnter");
+        cur.obstacle = obs.node;
+    }
+    return obs != null && obs != undefined;
 };
 
 
