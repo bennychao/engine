@@ -34,8 +34,8 @@ var cars = [
         count: "1.1w",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-        pos: new pc.Vec3(1, 1, 2)
+        image:"car1_image.jpg",
+        pos: new pc.Vec3(10.632, 1.426, 16.57)
     },
     {
         name: "Car2",
@@ -43,8 +43,8 @@ var cars = [
         
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-        pos: new pc.Vec3(1, 1, 6)
+        image:"car2_image.jpg",
+        pos: new pc.Vec3(16.858, 1.426, 10.467)
     },
     {
         name: "Car3",
@@ -52,8 +52,8 @@ var cars = [
         
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-       pos: new pc.Vec3(1, 1, 10)
+        image:"car3_image.jpg",
+       pos: new pc.Vec3(19.577, 1.426, 2.152)
     },
     {
         name: "Car4",
@@ -61,8 +61,8 @@ var cars = [
         
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-       pos: new pc.Vec3(1, 1, 15)
+        image:"car4_image.jpg",
+       pos: new pc.Vec3(18.466, 1.426, -6.651)
     },
 
     {
@@ -70,24 +70,24 @@ var cars = [
         count: "1.1w",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-        pos: new pc.Vec3(1, 1, 20)
+        image:"image.jpg",
+        pos: new pc.Vec3(13.511, 1.426, -13.98)
     },     
     {
         name: "Car6",
         count: "1.1w",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-        pos: new pc.Vec3(1, 1, 27)
+        image:"image.jpg",
+        pos: new pc.Vec3(5.832, 1.426, -18.422)
     },
     {
         name: "Car7",
         count: "1.1w",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.png",
-        pos: new pc.Vec3(1, 1, 40)
+        image:"image.jpg",
+        pos: new pc.Vec3(-2.854, 1.426, -19.012)
     },
 ];    
 
@@ -167,7 +167,7 @@ MainScene.prototype.initialize = function() {
     }
     
     
-
+    this.mainUI = this.app.root.findByName("MainUI");
 
     this.sysInfo = {bFirstLoad :  this.checkFirstLoad()};
 
@@ -233,8 +233,10 @@ MainScene.prototype.loadCars = function(dt) {
                 var tt = carTemplate.clone();
 
                 tt.name = car.name;
-
-                tt.setLocalPosition(c.pos);
+                var pos = c.pos.clone();
+                pos.y = tt.getPosition().y;
+                
+                tt.setLocalPosition(pos);
                 tt.enabled = true;
                 cur.app.root.addChild(tt);
                 
@@ -245,6 +247,35 @@ MainScene.prototype.loadCars = function(dt) {
 
         carTemplate.enabled = false; 
         resolve();
+    });
+    
+    //init the detail trigger
+    var carsObstacle = this.entity.findByName("carsObstacle");
+    
+    carsObstacle.children.forEach(function(ob){
+        
+        var bShow = false;
+       ob.on("onCollisionEnter", function(pos){
+           //check the distance
+           var obPos = ob.getPosition().clone();
+           obPos.sub(pos);
+            var dis = obPos.length();
+           console.log("dis is " + dis);
+           
+           if (dis < 5){
+               //show the Car's Detail UI
+               bShow = true;
+               cur.mainUI.fire("showCarDetail");
+           }
+       });
+        
+        
+        ob.on("onCollisionLeave", function(pos){
+           if (bShow){
+               cur.mainUI.fire("hideCarDetail");
+           }
+       }); 
+        
     });
 };
 

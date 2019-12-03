@@ -26,6 +26,21 @@ CarController.prototype.initialize = function () {
     }
     
     
+    this.entity.on("showCarDetail", function(){
+        
+        this.hideCarsNav();
+        
+        this.showCarsDetail();
+        
+    });
+    
+    this.entity.on("hideCarDetail", function(){
+        
+        this.showCarsNav();
+        
+        this.hideCarsDetail();
+        
+    });
     
 };
 

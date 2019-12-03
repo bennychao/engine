@@ -443,7 +443,7 @@ FirstPersonCamera.prototype.checkObstacle = function (vec) {
             cur.obstacle.fire("onCollisionLeave");
         }
 
-        obs.node.fire("onCollisionEnter");
+        obs.node.fire("onCollisionEnter", vec);
         cur.obstacle = obs.node;
     }
     return obs != null && obs != undefined;

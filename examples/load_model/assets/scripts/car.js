@@ -40,7 +40,12 @@ Car.prototype.initialize = function() {
     
     this.texs = new Array();
     
+
+    
     var cur = this;
+    
+    var carName = cur.entity.parent.name;
+    
     json.forEach(function (node){
         
         var asset = cur.app.assets.find(node.tex);
@@ -48,12 +53,12 @@ Car.prototype.initialize = function() {
     });
     
     var carConfig = cars.find(function (c){
-        return c.name == cur.entity.parent.name;
+        return c.name == carName;
     });
     
     
     //set the Car image and logo
-    var img = this.entity.findByName("image"); //for car's image id
+    var img = this.app.root.findByName(carName + "_image"); //for car's image id
     
     if (img){
         singleMainScene.getAsset(carConfig.image, "texture", function(asset){
@@ -67,7 +72,7 @@ Car.prototype.initialize = function() {
     
     }
 
-    var logo = this.entity.findByName("logo"); //for car's image id
+    var logo = this.entity.findByName(carName + "_logo"); //for car's image id
     
     if (logo){
         singleMainScene.getAsset(carConfig.logo, "texture", function(asset){
