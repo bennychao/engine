@@ -183,7 +183,15 @@ Ui.prototype.bindAssets = function () {
             width: 100,
             height: 60,
             string: "1.1w"
-        }
+        },
+         methods: {
+            OnOk: function (event) {
+                this.entity.fire("onOk");
+            },
+            OnCancel: function (event) {
+                this.entity.fire("onCancel");
+            },
+         }
       });
     
     this.updateUIPos();

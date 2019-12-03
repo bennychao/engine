@@ -265,7 +265,7 @@ CarController.prototype.hideCarsDetail = function () {
 ////// change color panel
 CarController.prototype.showChangeColorUI = function () {
     
-    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    var colorPanel = this.entity.findByName("ChangeColorPanel");
     
     var rect = calculateElementPos(colorPanel);
     
@@ -294,7 +294,7 @@ CarController.prototype.showChangeColorUI = function () {
 
 CarController.prototype.hideChangeColorUI = function () {
     
-    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    var colorPanel = this.entity.findByName("ChangeColorPanel");
     
     var rect = calculateElementPos(colorPanel);
     
@@ -321,7 +321,7 @@ CarController.prototype.hideChangeColorUI = function () {
 
 CarController.prototype.enableHandleChangeColor = function () {
     
-    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    var colorPanel = this.entity.findByName("ChangeColorPanel");
     
     this.buttons = colorPanel.find(function (node){
         return node.script && node.script.has('imgButton'); // player
@@ -341,7 +341,7 @@ CarController.prototype.enableHandleChangeColor = function () {
 
 CarController.prototype.disableHandleChangeColor = function () {
     
-    var colorPanel = this.carNavPanel.findByName("ChangeColorPanel");
+    var colorPanel = this.entity.findByName("ChangeColorPanel");
     
     this.buttons = colorPanel.find(function (node){
         return node.script && node.script.has('imgButton'); // player
@@ -355,6 +355,67 @@ CarController.prototype.disableHandleChangeColor = function () {
     });
 };
 
+// control Share Panel
+CarController.prototype.showShareUI = function () {
+    
+    var sharePanel = this.entity.findByName("SharePanel");
+    
+    var rect = calculateElementPos(sharePanel);
+    
+    var formY = - rect.w;// - this.curUIHeight;
+    var position = { y: formY };
+
+    var pos = sharePanel.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: 0 }, 300)
+        .onStart(function () {
+            sharePanel.enabled = true;
+            //register button click
+            //enableHandleChangeColor();
+            sharePanel.on("onCancel", function(){
+                
+               // do nothing
+               cur.hideShareUI();
+            });
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            sharePanel.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            
+        })
+        .start();
+};
+
+CarController.prototype.hideShareUI = function () {
+    
+    var sharePanel = this.entity.findByName("SharePanel");
+    
+    var rect = calculateElementPos(sharePanel);
+    
+    var formY = 0;// - this.curUIHeight;
+    var position = { y: formY };
+
+    var pos = sharePanel.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: - rect.w }, 300)
+        .onStart(function () {
+            sharePanel.enabled = true;
+            //register button click
+            //enableHandleChangeColor();
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            sharePanel.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            sharePanel.enabled = false;
+        })
+        .start();
+};
 // swap method called for script hot-reloading
 // inherit your script state here
 // CarController.prototype.swap = function(old) { };
