@@ -83,11 +83,22 @@ FirstPersonCamera.prototype.update = function (dt) {
 
     var mat = this.entity.getWorldTransform();
 
+    //(this.bSteering || this.bTargeting || this.bMouseDown) && 
     if (this.force.length()) {
         var pos = mat.transformPoint(this.force);
-        var cur = this.entity.position;
-        pos = pos.sub(cur);
-        this.entity.translate(pos.x, 0, pos.z);
+
+        
+        if (this.checkObstacle(pos)){
+            //console.log("in checkObstacle");
+            //
+            this.entity.fire("onDetectObstacle");
+        }
+        else{
+            var cur = this.entity.position;
+            pos = pos.sub(cur);
+            this.entity.translate(pos.x, 0, pos.z);
+        }
+       
     }
     // // Update the camera's position
     // var keyboard = this.app.keyboard;
@@ -206,9 +217,35 @@ FirstPersonCamera.prototype.faceTo = function (target) {
     
     this.entity.setPosition(pos);
     
-    pos = target.getPosition();
     
-    this.entity.lookAt(pos);
+    var f = this.entity.forward; 
+    f.y = 0;
+    //t.normalize(); 
+    var angle = this.angleWithDir(f, new pc.Vec3(-dir.x, -dir.y, -dir.z));
+    
+    var cur = this;
+    
+    var position = { y: this.ey };    
+    var tweenRotate = new TWEEN.Tween(position).to({ y: this.ey + angle }, 300)
+        .onStart(function () {
+        })
+        .onUpdate(function () {
+            cur.ey = position.y;
+        })
+        .onStop(function () {
+        })
+        .start();
+
+    /*
+        pos = target.getPosition();
+
+        this.entity.lookAt(pos.x, pos.y, pos.z, pc.Vec3.UP.x, pc.Vec3.UP.y, pc.Vec3.UP.z);
+
+        var eulers = this.entity.getLocalEulerAngles();   
+
+        this.ex = eulers.x;
+        this.ey = eulers.y;
+    */
     //this.entity.rotate(0, 180, 0);
 };
 
@@ -273,18 +310,55 @@ FirstPersonCamera.prototype.moveTo = function (target) {
     var cur = this;
     this.bTargeting = true;
     
-    var onupdateFunc = function(){     
+    var t = target.clone();
+    t.y = cur.entity.getPosition().y;        
+    
+    var curDis = t.clone();
+    curDis.sub(cur.entity.getPosition());
+    
+    //face to the target
+    var f = cur.entity.forward; 
+    f.y = 0;
+    //t.normalize(); 
+    var angle = cur.angleWithDir(f, curDis);
+    
+    
+    var position = { y: cur.ey };    
+    var tweenRotate = new TWEEN.Tween(position).to({ y: cur.ey + angle }, 300)
+        .onStart(function () {
+        })
+        .onUpdate(function () {
+            cur.ey = position.y;
+        })
+        .onStop(function () {
+        })
+        .start();
+
+    //reset the force
+    cur.force.x = 0;
+    cur.force.z = 0;
+    
+    //onDetectObstacle
+    //
+    this.entity.on("onDetectObstacle", function(){
+       
+        //stop moving
+        cur.off("onUpdate");
+        cur.bTargeting = false;
+        cur.force.x = 0;
+        cur.force.z = 0;
+    });
+    
+    var onupdateFunc = function(){             
+  
+        var dis = t.clone();
         
-        var t = target.clone();
-        t.y = cur.entity.getPosition().y;        
-        var newTarget = t.clone();
-        
-        t.sub(cur.entity.getPosition());
+        dis.sub(cur.entity.getPosition());
         
        //check if stop
         
         //var dis = t.distance(this.entity.getPosition());
-        if (t.lengthSq() < 0.5 || cur.checkObstacle(this.entity.getPosition()))
+        if (dis.lengthSq() < 0.5) // || cur.checkObstacle(this.entity.getPosition()))
             {
                 cur.off("onUpdate");
                 cur.bTargeting = false;
@@ -295,15 +369,21 @@ FirstPersonCamera.prototype.moveTo = function (target) {
             }
         else
             {
-                t.normalize(); 
 
-                t.scale(cur.speed);
                 
-                cur.force.x = t.x;
-                cur.force.z = t.z;
+                //t.normalize(); 
+
+                //t.scale(cur.speed);
                 
-                cur.entity.setPosition(newTarget);
+                //cur.force.x = t.x;
+                //cur.force.z = t.z;
                 
+                //cur.entity.setPosition(newTarget);
+                //
+                //cur.ey = pc.math.lerp(cur.ey, cur.ey + angle, 0.1);
+                
+                
+                cur.force.z = pc.math.lerp(cur.force.z, -cur.speed, 0.01);
                 // cur.force.x = pc.math.lerp(cur.force.x, t.x, 0.1);
                 // cur.force.z = pc.math.lerp(cur.force.z, t.z, 0.1);
             }
@@ -328,8 +408,8 @@ FirstPersonCamera.prototype.loadObstacles = function () {
     collisions.forEach(function (node){
         
         if (node.collision.type == "box"){
-            
-            var box = new pc.BoundingBox(node.getPosition(), node.collision.halfExtents);
+            var scale = node.getLocalScale();
+            var box = new pc.BoundingBox(node.getPosition(), new pc.Vec3(node.collision.halfExtents.x * scale.x, node.collision.halfExtents.y * scale.y, node.collision.halfExtents.z * scale.z));
             cur.obstacleList.push({bounding:box, node:node});
         }
         else  if (node.collision.type == "sphere"){
@@ -378,6 +458,29 @@ FirstPersonCamera.prototype.angle = function (v1, v2) {
     //ret = d;
     
     return d;
+};
+
+
+FirstPersonCamera.prototype.angleWithDir = function (v1, v2) {
+    
+    if (v1.length() <=0.001)
+        return 0;
+    
+    if (v2.length() <=0.001)
+        return 0;
+    
+    var d = Math.acos(v1.dot(v2) / (v1.length() * v2.length()));
+            
+    var ret = d * 180 / Math.PI;
+    //ret = d;
+    //
+    var dir = new pc.Vec3().cross(v1, v2);
+    
+    if (dir.dot(pc.Vec3.UP) < 0){
+        return -ret;
+    }
+    
+    return ret;
 };
 
 

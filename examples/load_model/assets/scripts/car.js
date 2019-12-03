@@ -30,6 +30,8 @@ Car.prototype.initialize = function() {
     this.entity.element.on("mousemove", this._onMouseMove, this);
     this.entity.element.on("mouseup", this._onMouseUp, this);
     
+    this.entity.element.on("mouseleave", this._onMouseUp, this);
+    
     this.curAngle = 0;
     
     this.dragging = false;
@@ -46,7 +48,7 @@ Car.prototype.initialize = function() {
     });
     
     var carConfig = cars.find(function (c){
-        return c.name == cur.entity.name;
+        return c.name == cur.entity.parent.name;
     });
     
     
@@ -114,7 +116,8 @@ Car.prototype._onMouseMove = function (e) {
     
     if (this.dragging)   
     {
-        this.curAngle -= e.dx * this.offset + 360;
+        this.curAngle -= e.dx * this.offset;
+        this.curAngle  += 360;
         this.curAngle %= 360;        
         //rotate the car
         //

@@ -2,7 +2,6 @@
 var MainSceneId = 831774;
 var SubSceneId = 838927;
 
-//car'panel's anim and control function
 
 function animate() {
 
@@ -12,22 +11,6 @@ function animate() {
 
 }
 
-
-animate();
-
-
-function checkFirstLoad(){
-     var bFirst = localStorage.getItem("firstLoad");
-    
-    if (!bFirst){
-        localStorage.setItem("firstLoad", true);
-    }
-    
-    return bFirst === undefined || bFirst === false || bFirst === null;
-}
-
-
-var sysInfo = {bFirstLoad :  checkFirstLoad()};
 
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -52,7 +35,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:1, y:0, z:1}
+        pos: new pc.Vec3(1, 1, 2)
     },
     {
         name: "Car2",
@@ -61,7 +44,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:3, y:0, z:1}
+        pos: new pc.Vec3(1, 1, 6)
     },
     {
         name: "Car3",
@@ -70,7 +53,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:4, y:0, z:1}
+       pos: new pc.Vec3(1, 1, 10)
     },
     {
         name: "Car4",
@@ -79,7 +62,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:5, y:0, z:1}
+       pos: new pc.Vec3(1, 1, 15)
     },
 
     {
@@ -88,7 +71,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:7, y:0, z:1}
+        pos: new pc.Vec3(1, 1, 20)
     },     
     {
         name: "Car6",
@@ -96,7 +79,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:8, y:0, z:1}
+        pos: new pc.Vec3(1, 1, 27)
     },
     {
         name: "Car7",
@@ -104,7 +87,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"image.png",
-        pos: {x:6, y:0, z:1}
+        pos: new pc.Vec3(1, 1, 40)
     },
 ];    
 
@@ -114,6 +97,11 @@ var MainScene = pc.createScript('mainScene');
 
 // initialize code called once per entity
 MainScene.prototype.initialize = function() {
+    //car'panel's anim and control function
+
+
+    this.animate();
+
     
     //https://launch.playcanvas.com/831774?debug=true&car=Car1
     //    
@@ -124,7 +112,7 @@ MainScene.prototype.initialize = function() {
     setTimeout(function () {  
        // cur.checkSwithToCar();
        // 
-       if (sysInfo.bFirstLoad){
+       if (cur.sysInfo.bFirstLoad){
 
            
             var btn = hintPanel.findByName("Button");
@@ -180,9 +168,29 @@ MainScene.prototype.initialize = function() {
     
     
 
+
+    this.sysInfo = {bFirstLoad :  this.checkFirstLoad()};
+
     this.loadCars();
     
 };
+
+MainScene.prototype.checkFirstLoad = function(){
+     var bFirst = localStorage.getItem("firstLoad");
+    
+    if (!bFirst){
+        localStorage.setItem("firstLoad", true);
+    }
+    
+    return bFirst === undefined || bFirst === false || bFirst === null;
+};
+
+MainScene.prototype.animate = function() {
+
+    animate();
+
+};
+
 
 // update code called every frame
 MainScene.prototype.update = function(dt) {
@@ -220,14 +228,17 @@ MainScene.prototype.loadCars = function(dt) {
 
         cars.forEach(function (c){
             
+            var car = c;
             cur.loadCarAsset(c, function(){
                 var tt = carTemplate.clone();
 
-                tt.name = c.name;
+                tt.name = car.name;
 
                 tt.setLocalPosition(c.pos);
-
+                tt.enabled = true;
                 cur.app.root.addChild(tt);
+                
+               
             });
 
         });

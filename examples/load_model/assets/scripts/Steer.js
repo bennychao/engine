@@ -32,6 +32,12 @@ Steer.prototype.initialize = function() {
 
     this.targetLight = this.entity.findByName("target");   
     this.steerNode = this.entity.findByName("steer");
+    
+    //un register the events
+    this.entity.on("destroy", function(){
+        mouse.off();
+        //this.entity.off();
+    });
 };
 
 // update code called every frame
