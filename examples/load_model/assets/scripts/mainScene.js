@@ -32,6 +32,7 @@ var cars = [
     {
         name: "Car1",
         count: "1.1w",
+        series:"test001",
         model:"car_001.json",
         logo:"logo.png",
         image:"car1_image.jpg",
@@ -41,6 +42,7 @@ var cars = [
         name: "Car2",
         count: "1.1w",
         
+        series:"test002",
         model:"car_001.json",
         logo:"logo.png",
         image:"car2_image.jpg",
@@ -50,6 +52,7 @@ var cars = [
         name: "Car3",
         count: "1.1w",
         
+        series:"test003",
         model:"car_001.json",
         logo:"logo.png",
         image:"car3_image.jpg",
@@ -59,6 +62,7 @@ var cars = [
         name: "Car4",
         count: "1.1w",
         
+        series:"test004",
         model:"car_001.json",
         logo:"logo.png",
         image:"car4_image.jpg",
@@ -68,6 +72,7 @@ var cars = [
     {
         name: "Car5",
         count: "1.1w",
+        series:"test005",
         model:"car_001.json",
         logo:"logo.png",
         image:"image.jpg",
@@ -76,6 +81,7 @@ var cars = [
     {
         name: "Car6",
         count: "1.1w",
+        series:"test006",
         model:"car_001.json",
         logo:"logo.png",
         image:"image.jpg",
@@ -84,6 +90,7 @@ var cars = [
     {
         name: "Car7",
         count: "1.1w",
+        series:"test007",
         model:"car_001.json",
         logo:"logo.png",
         image:"image.jpg",
@@ -252,31 +259,34 @@ MainScene.prototype.loadCars = function(dt) {
     //init the detail trigger
     var carsObstacle = this.entity.findByName("carsObstacle");
     
-    carsObstacle.children.forEach(function(ob){
-        
-        var bShow = false;
-       ob.on("onCollisionEnter", function(pos){
-           //check the distance
-           var obPos = ob.getPosition().clone();
-           obPos.sub(pos);
-            var dis = obPos.length();
-           console.log("dis is " + dis);
-           
-           if (dis < 5){
-               //show the Car's Detail UI
-               bShow = true;
-               cur.mainUI.fire("showCarDetail");
-           }
-       });
-        
-        
-        ob.on("onCollisionLeave", function(pos){
-           if (bShow){
-               cur.mainUI.fire("hideCarDetail");
-           }
-       }); 
-        
-    });
+    if (carsObstacle){
+        carsObstacle.children.forEach(function(ob){
+
+            var bShow = false;
+           ob.on("onCollisionEnter", function(pos){
+               //check the distance
+               var obPos = ob.getPosition().clone();
+               obPos.sub(pos);
+                var dis = obPos.length();
+               console.log("dis is " + dis);
+
+               if (dis < 5){
+                   //show the Car's Detail UI
+                   bShow = true;
+                   cur.mainUI.fire("showCarDetail", ob);
+               }
+           });
+
+
+            ob.on("onCollisionLeave", function(pos){
+               if (bShow){
+                   cur.mainUI.fire("hideCarDetail", ob);
+               }
+           }); 
+
+        });
+    }
+
 };
 
 MainScene.prototype.loadCarAsset = function(car, callback) {

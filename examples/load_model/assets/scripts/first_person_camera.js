@@ -441,10 +441,24 @@ FirstPersonCamera.prototype.checkObstacle = function (vec) {
     {
         if (cur.obstacle){
             cur.obstacle.fire("onCollisionLeave");
+            cur.obstacle = null;
         }
 
         obs.node.fire("onCollisionEnter", vec);
         cur.obstacle = obs.node;
+    }
+    
+    //check current distance
+    if (cur.obstacle){
+        var pos = cur.obstacle.getPosition();
+        
+        pos.sub(this.entity.getPosition());
+        
+        if (pos.length() > 10){
+            cur.obstacle.fire("onCollisionLeave");
+            cur.obstacle = null;
+        }
+            
     }
     return obs != null && obs != undefined;
 };

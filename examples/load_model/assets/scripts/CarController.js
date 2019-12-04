@@ -11,6 +11,8 @@ var CarController = pc.createScript('carController');
 // initialize code called once per entity
 CarController.prototype.initialize = function () {
 
+
+    
     this.initCarNavUIs();
     this.initCarDetailUIs();
     
@@ -26,19 +28,47 @@ CarController.prototype.initialize = function () {
     }
     
     
-    this.entity.on("showCarDetail", function(){
+    this.entity.on("showCarDetail", function(ob){
         
         this.hideCarsNav();
         
         this.showCarsDetail();
         
+        var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
+        
+        var carItems = this.app.root.find(function(c){
+            return c.script.car;
+        });
+        
+        var curCar = carItems.find(function (c){
+           return box.containsPoint(c.getPosition());
+        });
+        
+        if (curCar){
+            curCar.script.car.showHint();
+            //[TODO] auto show
+        }
     });
     
-    this.entity.on("hideCarDetail", function(){
+    this.entity.on("hideCarDetail", function(ob){
         
         this.showCarsNav();
         
         this.hideCarsDetail();
+        
+        var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
+        
+        var carItems = this.app.root.find(function(c){
+            return c.script.car;
+        });
+        
+        var curCar = carItems.find(function (c){
+           return box.containsPoint(c.getPosition());
+        });
+        
+        if (curCar){
+            curCar.script.car.hideHint();
+        }
         
     });
     
@@ -72,7 +102,7 @@ CarController.prototype.initCarDetailUIs = function (dt) {
     //left, bottom, right and top
     //set the Vec4 anchor 's top
     
-    var an = this.carDetailUI.element.anchor.clone();
+    var an = this.carDetailUI.element.anchor;
     
     an.w = an.y +  (newH / screenH); 
     
@@ -126,15 +156,62 @@ CarController.prototype.initCarNavUIs = function (dt) {
     //
     this.carNavPanel = this.entity.findByName("CarNavPanel");
 
-
+    var cur = this;
     var index = 0;
     //init the content
     //set the size of content
     var content = this.carNavPanel.findByName("Content");
-    content.children.forEach(function (node) {
-        node.findByName("title" + index).fire("changeData", cars[index].name);
-        node.findByName("count" + index).fire("changeData", cars[index++].count);
+    // content.children.forEach(function (node) {
+    //     node.findByName("title" + index).fire("changeData", cars[index].series);
+    //     node.findByName("count" + index).fire("changeData", cars[index++].count);
+    // });
+
+    var template = content.children[0];
+    var newItem = template;
+    var count = 0;
+    var itemW = 1 / (cars.length);
+
+    cars.forEach(function(c){
+
+        //if (newItem === null)
+        {
+            newItem = template.clone();
+
+            
+            content.addChild(newItem);
+        }
+        
+        var titleNode = newItem.findByName("title0");
+        titleNode.name = "title" + count;
+        
+        titleNode.on("bindAssets", function(){
+            titleNode.fire("changeData", c.series);
+        });
+
+        var countNode = newItem.findByName("count0");
+        countNode.name = "count" + count;
+        
+        countNode.on("bindAssets", function(){
+            countNode.fire("changeData", c.count);
+        });
+        
+        //left, bottom, right and top
+        newItem.element.anchor.x = count * itemW;
+        newItem.element.anchor.z = (count + 1) * itemW;
+        
+        
+        var btn = newItem.findByName("Button");
+        btn.on("click", function(){
+           console.log("click a car " + c.name);
+        });
+        
+        //next item
+        count++;
+        
+        newItem = null;
     });
+    
+    template.enabled = false;
 
     this.carNavPosY = this.carNavPanel.getLocalPosition().y;
 
@@ -152,14 +229,31 @@ CarController.prototype.initCarNavUIs = function (dt) {
     var rButton = this.carNavPanel.findByName("RButton");
     rButton.button.on("click", function (event) {
         var pos = content.getLocalPosition();
-
+        var position = { y: pos.x };
+        
         pos.x += itemWidth;
-        content.setLocalPosition(pos);
-
+        //set the active status
         lButton.button.active = true;
-        if (pos.x + itemWidth >= itemsWidth) {
+        if (Math.abs(pos.x) >= 0 && Math.abs(pos.x) < itemWidth) {
             rButton.button.active = false;
         }
+        
+        if (cur.tweenA)
+            cur.tweenA.stop();
+        
+        cur.tweenA = new TWEEN.Tween(position).to({ y: pos.x }, 300)
+        .onStart(function () {
+        })
+        .onUpdate(function () {
+            pos.x = position.y;
+            content.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            //to show the html UI ?? register the click event
+
+            
+        })
+        .start();
 
     });
 
@@ -168,13 +262,32 @@ CarController.prototype.initCarNavUIs = function (dt) {
 
     lButton.button.on("click", function (event) {
         var pos = content.getLocalPosition();
+        var position = { y: pos.x };
+        
         pos.x -= itemWidth;
         content.setLocalPosition(pos);
 
         rButton.button.active = true;
-        if (pos.x <= 0) {
+        if (itemsWidth + pos.x <= rect.z) {
             lButton.button.active = false;
         }
+        
+        if (cur.tweenA)
+            cur.tweenA.stop();
+        
+        cur.tweenA = new TWEEN.Tween(position).to({ y: pos.x }, 300)
+        .onStart(function () {
+        })
+        .onUpdate(function () {
+            pos.x = position.y;
+            content.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            //to show the html UI ?? register the click event
+
+            
+        })
+        .start();
     });
     
     this.carNavPanel.enabled = false;

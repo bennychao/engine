@@ -53,7 +53,7 @@ Car.prototype.initialize = function() {
     });
     
     var carConfig = cars.find(function (c){
-        return c.name == carName;
+        return c.name == carName; //cur.entity.parent.name;
     });
     
     
@@ -115,6 +115,8 @@ Car.prototype.onLeave = function(dt) {
 Car.prototype._onMouseDown = function (e) {
     this.dragging = true;
     this.camera.fire("onSteerStart", null);
+    
+    this.curPos = new pc.Vec2(e.x, e.y);
 };
 
 Car.prototype._onMouseMove = function (e) {
@@ -137,9 +139,20 @@ Car.prototype._onMouseUp = function (e) {
     this.dragging = false;
     this.camera.fire("onSteerStop", null);
     
+    var cur = new pc.Vec2(e.x, e.y);
+    
+    cur.sub(this.curPos);
+    
+    if (cur.lengthSq() < 0.01){
+        //click
+        //this.entity.fire("click", this.entity);
+        
+        this.autoShow();
+        this.showHint();
+    }
 };
 
-Car.prototype.autoShow = function (e) {
+Car.prototype.autoShow = function () {
 
     var car = this;
     var timesRun = 0;
@@ -162,6 +175,27 @@ Car.prototype.autoShow = function (e) {
         //do whatever here..
 
     }, car.speed);
+};
+
+Car.prototype.showHint = function (e) {
+
+    this.entity.findByName("hint1").script.ui.enabled = true;
+    this.entity.findByName("hint1").script.ui.uiItem.string = "Test 001 1.1W !!";
+    
+    this.entity.findByName("hint2").script.ui.enabled = true;
+    this.entity.findByName("hint2").script.ui.uiItem.string = "Test 001 1.1W !!";
+    
+    
+    var cur = this;
+    setTimeout(function () {
+        cur.hideHint();
+    }, 3000);
+};
+
+Car.prototype.hideHint = function (e) {
+
+    this.entity.findByName("hint1").script.ui.enabled = false;
+    this.entity.findByName("hint2").script.ui.enabled = false;
 };
 
 Car.prototype.findTex = function (angle) {

@@ -1,0 +1,5 @@
+.parent_container {
+    position: absolute;
+    overflow: hidden;
+    pointer-events: none;
+}

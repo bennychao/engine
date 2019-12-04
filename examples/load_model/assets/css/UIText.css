@@ -1,0 +1,19 @@
+
+.text_container {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    
+    background-color: #222; 
+    color: #fff;
+    font-weight: 100;
+
+    pointer-events: none;
+    box-shadow: 0 0 16px rgba(0, 0, 0, .3);
+}
+
+
+.text_container > .text {
+    pointer-events: none;
+    padding: 8px;
+}

@@ -75,6 +75,13 @@ Ui.attributes.add('target', {
     description: 'The Entity to lookat'
 });
 
+Ui.attributes.add('uiParent', {
+    type: 'entity',
+    title: 'uiParent',
+    description: 'The Entity to uiParent'
+});
+
+
 Ui.attributes.add('ifBind', {
     type: 'boolean',
     title: 'ifBind',
@@ -106,14 +113,23 @@ Ui.attributes.add('farZ', {
 });
 
 Ui.prototype.initialize = function (){
+    var cur = this;
+    
     if (this.ifAutoBindAsset){
-        this.bindAssets();
+        
+        if (this.uiParent)
+            this.uiParent.on("bindAssets", function (){
+                cur.bindAssets();
+            });
+        else
+            this.bindAssets();
+
     }
     
     this.entity.on("bind", this.bindAssets, this);
     this.entity.on("changeData", this.changeData, this);
     
-    var cur = this;
+
     this.entity.on("destroy", function(e){
         //document.body.appendChild(this.div);
         if (cur.div) 
@@ -127,6 +143,7 @@ Ui.prototype.initialize = function (){
 
 
 Ui.prototype.bindAssets = function () {
+    var cur = this;
     // create STYLE element
     var style = document.createElement('style');
 
@@ -150,13 +167,24 @@ Ui.prototype.bindAssets = function () {
         this.div.setAttribute('v-bind:style', "{ top: posY + 'px', left: posX + 'px', transform: 'scale(' + posZ+ ')'}");
     }
     
-    this.div.innerHTML = this.html.resource || '';
+    if (this.html)
+        this.div.innerHTML = this.html.resource || '';
+    
     
     // append to body
     // can be appended somewhere else
     // it is recommended to have some container element
     // to prevent iOS problems of overfloating elements off the screen
-    document.body.appendChild(this.div);
+    // 
+    if (this.uiParent){
+        //this.uiParent.script.ui.div.appendChild(this.div);
+        //this.uiParent.script.ui.div.appendChild("<div>testet1233123</div>");
+        //document.body.appendChild(this.div);
+        //must find the div first
+        $('#uiItem_' + this.uiParent.name).append(this.div);
+    }
+    else
+        document.body.appendChild(this.div);
     
     this.counter = 0;
     
@@ -195,6 +223,8 @@ Ui.prototype.bindAssets = function () {
       });
     
     this.updateUIPos();
+    
+    this.entity.fire("bindAssets");
 };
 
 Ui.prototype.update = function(dt) {
@@ -210,7 +240,10 @@ Ui.prototype.update = function(dt) {
         
         if (this.ifSupportZ)
         {
-            this.uiItem.posZ = Math.max (0, this.farZ - coord.z) / this.farZ;
+            if (coord.z > 0)
+                this.uiItem.posZ = Math.max (0, this.farZ - coord.z) / this.farZ;
+            else
+                this.uiItem.posZ = 0;
         }
 
     }
@@ -222,11 +255,23 @@ Ui.prototype.updateUIPos = function() {
     {
         var ret =calculateElementPos(this.entity.element);
         
-        this.uiItem.posX = ret.x;
-        this.uiItem.posY = ret.y;
-        
-        this.uiItem.height = ret.w;
-        this.uiItem.width = ret.z;
+        if (this.uiParent){
+            var retParent =calculateElementPos(this.uiParent.element);
+            
+            this.uiItem.posX = ret.x - retParent.x;
+            this.uiItem.posY = ret.y - retParent.y;
+
+            this.uiItem.height = ret.w;
+            this.uiItem.width = ret.z;
+        }
+        else{
+            this.uiItem.posX = ret.x;
+            this.uiItem.posY = ret.y;
+
+            this.uiItem.height = ret.w;
+            this.uiItem.width = ret.z;           
+        }
+
     }
 };
 
@@ -266,6 +311,7 @@ Ui.prototype.bindEvents = function() {
         counter.textContent = self.counter;
     
     //try to VUE bind(in my loader)
+
 };
 
 Ui.prototype.changeData = function(data) {
