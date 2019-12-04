@@ -112,6 +112,12 @@ Ui.attributes.add('farZ', {
     default: 10
 });
 
+Ui.attributes.add('styles', { 
+    type: 'string',
+    array:true,
+    title: 'styles'
+});
+
 Ui.prototype.initialize = function (){
     var cur = this;
     
@@ -151,7 +157,16 @@ Ui.prototype.bindAssets = function () {
     document.head.appendChild(style);
     style.innerHTML = this.css.resource || '';
     
-    
+    if (this.styles){
+        this.styles.forEach(function (path){
+            var fileref=document.createElement("link");
+            fileref.rel="stylesheet"; 
+            fileref.type="text/css"; 
+            fileref.href=path; 
+            
+            document.head.appendChild(fileref);
+        });
+    }
     
     // Add the HTML
     this.div = document.createElement('div');
