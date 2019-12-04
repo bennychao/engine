@@ -63,7 +63,7 @@ FirstPersonCamera.prototype.initialize = function () {
     this.InitCheckUIList();
     
     
-    this.entity.on("faceTo", this.faceTo);
+    this.entity.on("faceTo", this.faceTo, this);
     
     this.checkSwithToCar();
     
@@ -71,7 +71,7 @@ FirstPersonCamera.prototype.initialize = function () {
     this.entity.on("destroy", function(){
         mouse.off();
         //this.entity.off();
-    });
+    }, this);
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
@@ -206,10 +206,17 @@ FirstPersonCamera.prototype.onSteer = function (curDir) {
 FirstPersonCamera.prototype.faceTo = function (target) {
     //this.bSteering = true;
     //target is a entity
-    var dir = target.forward.clone();
-    dir.scale(3);
+    //var dir = target.forward.clone();
+
     
     var pos = target.getPosition().clone();
+    
+    var o = new pc.Vec3(0, target.getPosition().y, 0);
+    
+    var dir = o.sub(target.getPosition());
+    dir.normalize();
+    
+    dir.scale(6);
     
     pos.add(dir);
     
@@ -224,6 +231,8 @@ FirstPersonCamera.prototype.faceTo = function (target) {
     var angle = this.angleWithDir(f, new pc.Vec3(-dir.x, -dir.y, -dir.z));
     
     var cur = this;
+    
+    this.ex = 0;
     
     var position = { y: this.ey };    
     var tweenRotate = new TWEEN.Tween(position).to({ y: this.ey + angle }, 300)
@@ -347,7 +356,7 @@ FirstPersonCamera.prototype.moveTo = function (target) {
         cur.bTargeting = false;
         cur.force.x = 0;
         cur.force.z = 0;
-    });
+    }, this);
     
     var onupdateFunc = function(){             
   

@@ -37,7 +37,7 @@ Steer.prototype.initialize = function() {
     this.entity.on("destroy", function(){
         mouse.off();
         //this.entity.off();
-    });
+    }, this);
 };
 
 // update code called every frame

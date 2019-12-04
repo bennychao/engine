@@ -11,7 +11,7 @@ var CarController = pc.createScript('carController');
 // initialize code called once per entity
 CarController.prototype.initialize = function () {
 
-
+    var cur = this;
     
     this.initCarNavUIs();
     this.initCarDetailUIs();
@@ -27,16 +27,18 @@ CarController.prototype.initialize = function () {
         this.showCarsNav();
     }
     
+    this.camera = this.app.root.findByName("camera");
+    
     
     this.entity.on("showCarDetail", function(ob){
         
-        this.hideCarsNav();
+        cur.hideCarsNav();
         
-        this.showCarsDetail();
+        cur.showCarsDetail();
         
         var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
         
-        var carItems = this.app.root.find(function(c){
+        var carItems = cur.app.root.find(function(c){
             return c.script.car;
         });
         
@@ -48,17 +50,17 @@ CarController.prototype.initialize = function () {
             curCar.script.car.showHint();
             //[TODO] auto show
         }
-    });
+    }, this);
     
     this.entity.on("hideCarDetail", function(ob){
         
-        this.showCarsNav();
+        cur.showCarsNav();
         
-        this.hideCarsDetail();
+        cur.hideCarsDetail();
         
         var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
         
-        var carItems = this.app.root.find(function(c){
+        var carItems = cur.app.root.find(function(c){
             return c.script.car;
         });
         
@@ -70,7 +72,7 @@ CarController.prototype.initialize = function () {
             curCar.script.car.hideHint();
         }
         
-    });
+    }, this);
     
 };
 
@@ -202,7 +204,16 @@ CarController.prototype.initCarNavUIs = function (dt) {
         
         var btn = newItem.findByName("Button");
         btn.on("click", function(){
-           console.log("click a car " + c.name);
+           //console.log("click a car " + c.name);
+           //move to the car
+            var carNode = cur.app.root.findByName(c.name);
+            cur.camera.fire("faceTo", carNode);
+            
+            //show hint
+            carNode.fire("faceTo");
+            
+            cur.hideCarsNav();
+            cur.showCarsDetail();
         });
         
         //next item
@@ -299,6 +310,7 @@ CarController.prototype.update = function (dt) {
 };
 
 
+///show car's detail
 CarController.prototype.showCarsDetail = function () {
     var formY = this.carDetailPosY - this.curDetailUIHeight;
     var position = { y: formY };
@@ -369,7 +381,7 @@ CarController.prototype.showCarsNav = function () {
         .start();
 };
 
-CarController.prototype.hideCarsDetail = function () {
+CarController.prototype.hideCarsNav = function () {
     var formY = this.carNavPosY;// - this.curUIHeight;
     var position = { y: formY };
 
