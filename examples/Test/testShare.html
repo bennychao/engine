@@ -26,8 +26,8 @@
     <div class="share_container">
         <div class="container">
             <div class="row">
-                <div class="col-xs-6 col-xs-offset-3">
-                    <div class="social-share"></div>
+                <div class="col-xs-6 col-xs-offset-3 " id="sharer">
+                    
                 </div>
             </div>
             <div class="row">
@@ -39,6 +39,23 @@
 
         </div>
 
+        <script>
+                            $('#sharer').append("<div class='social-share'></div>");
+            var $config = {
+                title: '234',
+                description: '123',
+                sites: ['qzone', 'qq', 'weibo', 'wechat'],
+                wechatQrcodeTitle: '微信扫一扫：分享', // 微信二维码提示文字
+                wechatQrcodeHelper: '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
+            };
+            
+            setTimeout(function(){
+
+        
+            }, 1000);
+
+            //socialShare('.social-share', $config);
+        </script>
 
     </div>
 
