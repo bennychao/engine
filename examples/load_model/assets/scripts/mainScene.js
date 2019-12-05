@@ -1,6 +1,6 @@
 
-var MainSceneId = 831774;
-var SubSceneId = 838927;
+var MainSceneId = 838900;
+var SubSceneId = 841570;    //inner car scene
 
 
 function animate() {
@@ -466,7 +466,7 @@ MainScene.prototype.Mute = function(bMute) {
             });
 
             sounds.forEach(function(node){
-               node.sound.stop(); 
+               node.sound.pause(); 
             });
         });
 
@@ -480,7 +480,7 @@ MainScene.prototype.Mute = function(bMute) {
             });
 
             sounds.forEach(function(node){
-               node.sound.play(); 
+               node.sound.resume(); 
             });
         });
 

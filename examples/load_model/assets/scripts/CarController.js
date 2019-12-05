@@ -525,8 +525,8 @@ CarController.prototype.hideNavSubItemsUI = function () {
 CarController.prototype.showChangeColorUI = function () {
     
     var colorPanel = this.entity.findByName("ChangeColorPanel");
-    
-    var rect = calculateElementPos(colorPanel);
+    colorPanel.enabled = true;
+    var rect = calculateElementPos(colorPanel.element);
     
     var formY = - rect.w;// - this.curUIHeight;
     var position = { y: formY };
@@ -538,7 +538,7 @@ CarController.prototype.showChangeColorUI = function () {
         .onStart(function () {
             colorPanel.enabled = true;
             //register button click
-            enableHandleChangeColor();
+            cur.enableHandleChangeColor();
         })
         .onUpdate(function () {
             pos.y = position.y;
@@ -555,7 +555,7 @@ CarController.prototype.hideChangeColorUI = function () {
     
     var colorPanel = this.entity.findByName("ChangeColorPanel");
     
-    var rect = calculateElementPos(colorPanel);
+    var rect = calculateElementPos(colorPanel.element);
     
     var formY = 0;// - this.curUIHeight;
     var position = { y: formY };
@@ -566,7 +566,7 @@ CarController.prototype.hideChangeColorUI = function () {
     var tweenA = new TWEEN.Tween(position).to({ y: - rect.w }, 300)
         .onStart(function () {
            //colorPanel.off();
-           disableHandleChangeColor();
+           cur.disableHandleChangeColor();
         })
         .onUpdate(function () {
             pos.y = position.y;
@@ -623,7 +623,7 @@ CarController.prototype.showShareUI = function () {
     
     var sharePanel = this.entity.findByName("SharePanel");
     
-    var rect = calculateElementPos(sharePanel);
+    var rect = calculateElementPos(sharePanel.element);
     
     var formY = - rect.w;// - this.curUIHeight;
     var position = { y: formY };
@@ -656,7 +656,7 @@ CarController.prototype.hideShareUI = function () {
     
     var sharePanel = this.entity.findByName("SharePanel");
     
-    var rect = calculateElementPos(sharePanel);
+    var rect = calculateElementPos(sharePanel.element);
     
     var formY = 0;// - this.curUIHeight;
     var position = { y: formY };

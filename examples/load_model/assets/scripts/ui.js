@@ -24,9 +24,14 @@ var calculateElementPos = function(el) {
         return ret;
     }
     else if (el.entity.parent.element)
-    {
+    {        
         var retParent = calculateElementPos(el.entity.parent.element);
-        
+        if (!retParent)   {
+            var ret = new pc.Vec4();
+            return ret;
+        }
+
+            
         var w = (el.anchor.z - el.anchor.x)* retParent.z;
         if (w <= 0)
         {
@@ -130,7 +135,15 @@ Ui.prototype.initialize = function (){
         if (cur.div) 
         {
             var self = document.getElementById('uiItem_' + e.name);
-            document.body.removeChild(self);
+
+            if (this.uiParent){
+                //$('#uiItem_' + this.uiParent.name).remove(self);
+                $('#uiItem_' + e.name).remove();
+            }
+            else{
+                document.body.removeChild(self);
+            }
+
             //cur.div.remove();
         }
     }, this);
