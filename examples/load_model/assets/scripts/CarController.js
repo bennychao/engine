@@ -22,9 +22,9 @@ CarController.prototype.initialize = function () {
         this.showCarsDetail();
     }
     else{
-        
-
-        this.showCarsNav();
+        setTimeout(() => {
+            this.showCarsNav();
+        }, 1000);
     }
     
     this.camera = this.app.root.findByName("camera");
@@ -39,7 +39,7 @@ CarController.prototype.initialize = function () {
         var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
         
         var carItems = cur.app.root.find(function(c){
-            return c.script.car;
+            return c.script && c.script.car;
         });
         
         var curCar = carItems.find(function (c){
@@ -61,7 +61,7 @@ CarController.prototype.initialize = function () {
         var box = new pc.BoundingBox(ob.getPosition(), new pc.Vec3(ob.collision.halfExtents.x , ob.collision.halfExtents.y, ob.collision.halfExtents.z));
         
         var carItems = cur.app.root.find(function(c){
-            return c.script.car;
+            return c.script && c.script.car;
         });
         
         var curCar = carItems.find(function (c){
@@ -77,7 +77,19 @@ CarController.prototype.initialize = function () {
 };
 
 
+// update code called every frame
+CarController.prototype.update = function (dt) {
+
+};
+
+
+
+
+//detail functions
+
+//init the  car detail UI
 CarController.prototype.initCarDetailUIs = function (dt) {
+    var cur = this;
     //init cars detail UI
     this.carDetailUI = this.entity.findByName("CarDetailPanel");
 
@@ -86,6 +98,7 @@ CarController.prototype.initCarDetailUIs = function (dt) {
         return node.script && node.script.has('ui'); // player
     });
     
+    this.uiItems = uiItems;
     
     this.buttons = this.carDetailUI.find(function (node){
         return node.script && node.script.has('imgButton'); // player
@@ -96,7 +109,7 @@ CarController.prototype.initCarDetailUIs = function (dt) {
     var rect = calculateElementPos(this.carDetailUI.element);
     
     
-    var newH = rect.z * 0.2;
+    var newH = rect.z * 0.195;
     
     this.curDetailUIHeight = newH;
     
@@ -106,17 +119,31 @@ CarController.prototype.initCarDetailUIs = function (dt) {
     
     var an = this.carDetailUI.element.anchor;
     
-    an.w = an.y +  (newH / screenH); 
+    //an.w = an.y +  (newH / screenH); 
     
+    var centerY = an.y + ((rect.w / screenH)/ 2);
+    an.w = centerY +  (newH / screenH / 2);
+    an.y = centerY -  (newH / screenH / 2);
 
-    setTimeout(function () {
-        //wait for the children have init end
-        var count = 1.1;
-        uiItems.forEach(function (node) {
+    this.carDetailUI.element.height = newH;
+
+    var count = 1.1;
+    uiItems.forEach(function (node) {
+        cur.entity.on("changeData", function(){
             node.fire("changeData", count + "w");
             count += 0.1;
-        });
-    }, 500);
+        }, cur);
+
+    });
+
+    // setTimeout(function () {
+    //     //wait for the children have init end
+    //     var count = 1.1;
+    //     uiItems.forEach(function (node) {
+    //         node.fire("changeData", count + "w");
+    //         count += 0.1;
+    //     });
+    // }, 500);
 
     this.carDetailUI.enabled = false; 
     
@@ -128,6 +155,11 @@ CarController.prototype.initCarDetailUIs = function (dt) {
         });
 
     });
+
+
+    this.entity.removeChild(this.carDetailUI);
+
+    this.entity.addChild(this.carDetailUI);
 };
 
 
@@ -152,6 +184,83 @@ CarController.prototype.onClickDetail = function (btn){
                break;               
        } 
 };
+
+
+
+
+
+///show car's detail
+CarController.prototype.showCarsDetail = function () {
+    var formY = 0 - this.curDetailUIHeight;
+    var position = { y: formY };
+
+    var pos = this.carDetailUI.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: this.carDetailPosY }, 300)
+        .onStart(function () {
+
+            cur.carDetailUI.enabled = true;
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            cur.carDetailUI.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            //to show the html UI ?? register the click event
+
+            cur.showDetailSubItemsUI();
+        })
+        .start();
+
+        setTimeout(() => {
+            tweenA.stop();
+        }, 301);
+};
+
+CarController.prototype.hideCarsDetail = function () {
+    var formY = this.carDetailPosY;// - this.curDetailUIHeight;
+    var position = { y: formY };
+
+    var pos = this.carDetailUI.getLocalPosition();
+
+    var cur = this;
+    var tweenA = new TWEEN.Tween(position).to({ y: - this.curDetailUIHeight }, 300)
+        .onStart(function () {
+            cur.hideDetailSubItemsUI();
+
+        })
+        .onUpdate(function () {
+            pos.y = position.y;
+            cur.carDetailUI.setLocalPosition(pos);
+        })
+        .onStop(function () {
+            //to show the html UI ??
+            cur.carDetailUI.enabled = false;
+        })
+        .start();
+
+        setTimeout(() => {
+            tweenA.stop();
+        }, 301);
+};
+
+
+
+CarController.prototype.showDetailSubItemsUI = function (dt) {
+    this.uiItems.forEach(function(node){
+        node.script.ui.showUI();
+    });
+};
+
+
+CarController.prototype.hideDetailSubItemsUI = function (dt) {
+    this.uiItems.forEach(function(node){
+        node.script.ui.hideUI();
+    });
+};
+
+//nav functions 
 
 CarController.prototype.initCarNavUIs = function (dt) {
     ////////////////// init the cars nav UI
@@ -209,11 +318,12 @@ CarController.prototype.initCarNavUIs = function (dt) {
             var carNode = cur.app.root.findByName(c.name);
             cur.camera.fire("faceTo", carNode);
             
+            //trigger by detect collision
             //show hint
-            carNode.fire("faceTo");
+            // carNode.fire("faceTo");
             
-            cur.hideCarsNav();
-            cur.showCarsDetail();
+            // cur.hideCarsNav();
+            // cur.showCarsDetail();
         });
         
         //next item
@@ -229,7 +339,25 @@ CarController.prototype.initCarNavUIs = function (dt) {
     //calculate the size
     var rect = calculateElementPos(this.carNavPanel.element);
 
-    this.curNavUIHeight = rect.w;
+    var newH = rect.z * 0.181; //
+    
+    var screenH = this.entity.screen.resolution.y;
+    //left, bottom, right and top
+    //set the Vec4 anchor 's top
+    
+    var an = this.carNavPanel.element.anchor;
+    
+    var centerY = an.y + ((rect.w / screenH)/ 2);
+    an.w = centerY +  (newH / screenH / 2);
+    an.y = centerY -  (newH / screenH / 2);
+
+    //an.w = an.y +  (newH / screenH / 2);
+
+    this.carNavPanel.element.height = newH;
+
+    //calculate the items' width
+    //this.curNavUIHeight = rect.w;
+    this.curNavUIHeight = newH;
 
     var itemWidth =  this.curNavUIHeight * 1; //TODO ratio
     var itemsWidth = itemWidth * cars.length;
@@ -302,65 +430,19 @@ CarController.prototype.initCarNavUIs = function (dt) {
     });
     
     this.carNavPanel.enabled = false;
-};
 
-// update code called every frame
-CarController.prototype.update = function (dt) {
+    //this.entity
 
-};
+    //to re layout
+    //var c = this.carNavPanel.clone();
+    this.entity.removeChild(this.carNavPanel);
 
-
-///show car's detail
-CarController.prototype.showCarsDetail = function () {
-    var formY = this.carDetailPosY - this.curDetailUIHeight;
-    var position = { y: formY };
-
-    var pos = this.carDetailUI.getLocalPosition();
-
-    var cur = this;
-    var tweenA = new TWEEN.Tween(position).to({ y: this.carDetailPosY }, 300)
-        .onStart(function () {
-
-            cur.carDetailUI.enabled = true;
-        })
-        .onUpdate(function () {
-            pos.y = position.y;
-            cur.carDetailUI.setLocalPosition(pos);
-        })
-        .onStop(function () {
-            //to show the html UI ?? register the click event
-
-            
-        })
-        .start();
-
-};
-
-CarController.prototype.hideCarsDetail = function () {
-    var formY = this.carDetailPosY;// - this.curDetailUIHeight;
-    var position = { y: formY };
-
-    var pos = this.carDetailUI.getLocalPosition();
-
-    var cur = this;
-    var tweenA = new TWEEN.Tween(position).to({ y: this.carDetailPosY  - this.curDetailUIHeight }, 300)
-        .onStart(function () {
-
-            cur.carDetailUI.enabled = true;
-        })
-        .onUpdate(function () {
-            pos.y = position.y;
-            cur.carDetailUI.setLocalPosition(pos);
-        })
-        .onStop(function () {
-            //to show the html UI ??
-        })
-        .start();
+    this.entity.addChild(this.carNavPanel);
 };
 
 
 CarController.prototype.showCarsNav = function () {
-    var formY = this.carNavPosY - this.curNavUIHeight;
+    var formY = - this.curNavUIHeight;
     var position = { y: formY };
 
     var pos = this.carNavPanel.getLocalPosition();
@@ -377,9 +459,15 @@ CarController.prototype.showCarsNav = function () {
         })
         .onStop(function () {
             //to show the html UI ??
+            cur.showNavSubItemsUI();
         })
         .start();
+
+        setTimeout(() => {
+            tweenA.stop();
+        }, 301);
 };
+
 
 CarController.prototype.hideCarsNav = function () {
     var formY = this.carNavPosY;// - this.curUIHeight;
@@ -388,9 +476,9 @@ CarController.prototype.hideCarsNav = function () {
     var pos = this.carNavPanel.getLocalPosition();
 
     var cur = this;
-    var tweenA = new TWEEN.Tween(position).to({ y: this.carNavPosY - this.curNavUIHeight }, 300)
+    var tweenA = new TWEEN.Tween(position).to({ y: - this.curNavUIHeight }, 300)
         .onStart(function () {
-
+            cur.hideNavSubItemsUI();
         })
         .onUpdate(function () {
             pos.y = position.y;
@@ -400,9 +488,40 @@ CarController.prototype.hideCarsNav = function () {
             cur.carNavPanel.enabled = false;
         })
         .start();
+
+    setTimeout(() => {
+        tweenA.stop();
+    }, 301);
+
 };
 
-////// change color panel
+CarController.prototype.showNavSubItemsUI = function () {
+    if (!this.navSubItemsUI)
+        this.navSubItemsUI = this.carNavPanel.find(function(node){
+            return node.script && node.script.ui;
+        });
+
+    this.navSubItemsUI.forEach(function(node){
+         node.script.ui.showUI();
+    });
+};
+
+
+CarController.prototype.hideNavSubItemsUI = function () {
+    if (!this.navSubItemsUI)
+        this.navSubItemsUI = this.carNavPanel.find(function(node){
+            return node.script && node.script.ui;
+        });
+
+    this.navSubItemsUI.forEach(function(node){
+        node.script.ui.hideUI();
+    });
+};
+
+
+
+
+// change color panel
 CarController.prototype.showChangeColorUI = function () {
     
     var colorPanel = this.entity.findByName("ChangeColorPanel");
@@ -457,6 +576,10 @@ CarController.prototype.hideChangeColorUI = function () {
             colorPanel.enabled = false;
         })
         .start();
+
+    setTimeout(() => {
+        tweenA.stop();
+    }, 301);
 };
 
 CarController.prototype.enableHandleChangeColor = function () {
@@ -555,6 +678,11 @@ CarController.prototype.hideShareUI = function () {
             sharePanel.enabled = false;
         })
         .start();
+
+    //TODO workaround for onStop
+    setTimeout(() => {
+        tweenA.stop();
+    }, 301);
 };
 // swap method called for script hot-reloading
 // inherit your script state here

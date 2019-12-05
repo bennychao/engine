@@ -98,7 +98,6 @@ FirstPersonCamera.prototype.update = function (dt) {
             pos = pos.sub(cur);
             this.entity.translate(pos.x, 0, pos.z);
         }
-       
     }
     // // Update the camera's position
     // var keyboard = this.app.keyboard;
@@ -256,6 +255,9 @@ FirstPersonCamera.prototype.faceTo = function (target) {
         this.ey = eulers.y;
     */
     //this.entity.rotate(0, 180, 0);
+
+    //get obstacle
+    this.checkObstacle(target.getPosition());
 };
 
 
@@ -463,7 +465,7 @@ FirstPersonCamera.prototype.checkObstacle = function (vec) {
         
         pos.sub(this.entity.getPosition());
         
-        if (pos.length() > 10){
+        if (pos.length() > 8){
             cur.obstacle.fire("onCollisionLeave");
             cur.obstacle = null;
         }

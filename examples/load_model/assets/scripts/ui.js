@@ -121,17 +121,6 @@ Ui.attributes.add('styles', {
 Ui.prototype.initialize = function (){
     var cur = this;
     
-    if (this.ifAutoBindAsset){
-        
-        if (this.uiParent)
-            this.uiParent.on("bindAssets", function (){
-                cur.bindAssets();
-            });
-        else
-            this.bindAssets();
-
-    }
-    
     this.entity.on("bind", this.bindAssets, this);
     this.entity.on("changeData", this.changeData, this);
     
@@ -145,6 +134,18 @@ Ui.prototype.initialize = function (){
             //cur.div.remove();
         }
     }, this);
+
+    if (this.ifAutoBindAsset){
+        
+        if (this.uiParent && this.uiParent.script.ui && !this.uiParent.script.ui.isBinded)
+            this.uiParent.on("bindAssets", function (){
+                cur.bindAssets();
+            });
+        else
+            this.bindAssets();
+    }
+    
+
 };
 
 
@@ -241,6 +242,8 @@ Ui.prototype.bindAssets = function () {
     this.updateUIPos();
     
     this.entity.fire("bindAssets");
+
+    this.isBinded = true;
 };
 
 Ui.prototype.update = function(dt) {
@@ -292,11 +295,13 @@ Ui.prototype.updateUIPos = function() {
 };
 
 Ui.prototype.showUI =function(){
-     this.uiItem.show = true;
+    if (this.uiItem)
+        this.uiItem.show = true;
 };
 
 Ui.prototype.hideUI =function(){
-     this.uiItem.show = false;
+    if (this.uiItem)
+        this.uiItem.show = false;
 };
 
 Ui.prototype.bindEvents = function() {

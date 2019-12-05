@@ -256,6 +256,7 @@ MainScene.prototype.loadCars = function(dt) {
         });
 
         carTemplate.enabled = false; 
+        carTemplate.parent.removeChild(carTemplate);
         resolve();
     });
     
