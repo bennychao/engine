@@ -253,6 +253,10 @@ Ui.prototype.bindAssets = function () {
       });
     
     this.updateUIPos();
+
+    if (this.bindJs){
+        this.bindJs();
+    }
     
     this.entity.fire("bindAssets");
 
