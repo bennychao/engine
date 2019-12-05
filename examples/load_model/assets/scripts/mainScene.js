@@ -106,7 +106,7 @@ var MainScene = pc.createScript('mainScene');
 MainScene.prototype.initialize = function() {
     //car'panel's anim and control function
 
-
+    this.mainUI = this.app.root.findByName("MainUI");
     this.animate();
 
     
@@ -119,9 +119,7 @@ MainScene.prototype.initialize = function() {
     setTimeout(function () {  
        // cur.checkSwithToCar();
        // 
-       if (cur.sysInfo.bFirstLoad){
-
-           
+       if (cur.sysInfo.bFirstLoad){           
             var btn = hintPanel.findByName("Button");
             btn.element.useInput = false;
             cur.disableInput();
@@ -152,7 +150,7 @@ MainScene.prototype.initialize = function() {
     this.ShareBtn = this.entity.findByName("Share");
     if (this.ShareBtn){
         this.ShareBtn.on("click", function(e){
-            
+            cur.mainUI.script.carController.showShareUI();
         });
     }
     
@@ -174,7 +172,7 @@ MainScene.prototype.initialize = function() {
     }
     
     
-    this.mainUI = this.app.root.findByName("MainUI");
+
 
     this.sysInfo = {bFirstLoad :  this.checkFirstLoad()};
 

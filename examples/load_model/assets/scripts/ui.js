@@ -244,10 +244,10 @@ Ui.prototype.bindAssets = function () {
         },
          methods: {
             OnOk: function (event) {
-                this.entity.fire("onOk");
+                cur.entity.fire("onOk");
             },
             OnCancel: function (event) {
-                this.entity.fire("onCancel");
+                cur.entity.fire("onCancel");
             },
          }
       });
@@ -301,8 +301,14 @@ Ui.prototype.updateUIPos = function() {
             this.uiItem.width = ret.z;
         }
         else{
-            this.uiItem.posX = ret.x;
-            this.uiItem.posY = ret.y;
+            var pivotX = (this.entity.element.pivot.x * (ret.z));
+            var curX = this.entity.getLocalPosition().x;
+
+            var pivotY = (this.entity.element.pivot.y * (ret.w));
+            var curY = this.entity.getLocalPosition().y;
+
+            this.uiItem.posX = ret.x + (curX - pivotX);
+            this.uiItem.posY = ret.y+ (curY - pivotY);
 
             this.uiItem.height = ret.w;
             this.uiItem.width = ret.z;           

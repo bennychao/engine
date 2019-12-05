@@ -15,6 +15,7 @@ CarController.prototype.initialize = function () {
     
     this.initCarNavUIs();
     this.initCarDetailUIs();
+    this.InitShareUI();
     
     var target = getQueryVariable("car");
     if (target){
@@ -619,6 +620,27 @@ CarController.prototype.disableHandleChangeColor = function () {
 };
 
 // control Share Panel
+
+CarController.prototype.InitShareUI = function () {
+    var sharePanel = this.entity.findByName("SharePanel");
+
+    sharePanel.script.ui.bindJs = function(){
+        //$('#sharer').append("<div class='social-share'></div>");
+        $.getScript('https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js',function(){
+            //alert('done');
+            var $config = {
+                title: '234',
+                description: '123',
+                sites: ['qzone', 'qq', 'weibo', 'wechat'],
+                wechatQrcodeTitle: '微信扫一扫：分享', // 微信二维码提示文字
+                wechatQrcodeHelper: '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
+            };
+            socialShare('.social-share', $config);
+        });
+
+    };
+};
+
 CarController.prototype.showShareUI = function () {
     
     var sharePanel = this.entity.findByName("SharePanel");
@@ -633,6 +655,8 @@ CarController.prototype.showShareUI = function () {
     var cur = this;
     var tweenA = new TWEEN.Tween(position).to({ y: 0 }, 300)
         .onStart(function () {
+
+            sharePanel.script.ui.showUI();
             sharePanel.enabled = true;
             //register button click
             //enableHandleChangeColor();
@@ -666,7 +690,7 @@ CarController.prototype.hideShareUI = function () {
     var cur = this;
     var tweenA = new TWEEN.Tween(position).to({ y: - rect.w }, 300)
         .onStart(function () {
-            sharePanel.enabled = true;
+            //sharePanel.enabled = true;
             //register button click
             //enableHandleChangeColor();
         })
@@ -676,6 +700,8 @@ CarController.prototype.hideShareUI = function () {
         })
         .onStop(function () {
             sharePanel.enabled = false;
+
+            sharePanel.script.ui.hideUI();
         })
         .start();
 
