@@ -461,7 +461,7 @@ FirstPersonCamera.prototype.checkObstacle = function (vec) {
     
     //check current distance
     if (cur.obstacle){
-        var pos = cur.obstacle.getPosition();
+        var pos = cur.obstacle.getPosition().clone();
         
         pos.sub(this.entity.getPosition());
         
@@ -530,9 +530,19 @@ FirstPersonCamera.prototype.InitCheckUIList = function (pos) {
 FirstPersonCamera.prototype.checkClickInUI = function (pos) {   
     
     var cur = this;
+    this.inputs = this.mainUI.children.filter(function(node) {
+        return node.element && node.element.useInput; // player
+    });
+
     var node = this.inputs.find(function (node){
        
         var rect = cur.calculateElementPos(node.element);
+        
+        var pivotX = (node.element.pivot.x * (ret.z));
+        var curX = node.getLocalPosition().x;
+
+        var pivotY = (nodeelement.pivot.y * (ret.w));
+        var curY = node.getLocalPosition().y;
         
         return pos.x > rect.x && pos.y > rect.y && (rect.x + rect.z) > pos.x && (rect.y + rect.w) > pos.y;
     });

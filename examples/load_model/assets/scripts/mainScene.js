@@ -75,7 +75,7 @@ var cars = [
         series:"test005",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.jpg",
+        image:"car5_image.jpg",
         pos: new pc.Vec3(13.511, 1.426, -13.98)
     },     
     {
@@ -84,7 +84,7 @@ var cars = [
         series:"test006",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.jpg",
+        image:"car6_image.jpg",
         pos: new pc.Vec3(5.832, 1.426, -18.422)
     },
     {
@@ -93,8 +93,62 @@ var cars = [
         series:"test007",
         model:"car_001.json",
         logo:"logo.png",
-        image:"image.jpg",
+        image:"car7_image.jpg",
         pos: new pc.Vec3(-2.854, 1.426, -19.012)
+    },
+    {
+        name: "Car8",
+        count: "1.1w",
+        series:"test008",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car8_image.jpg",
+        pos: new pc.Vec3(-2.854, 1.426, -19.012)
+    },
+    {
+        name: "Car9",
+        count: "1.1w",
+        series:"test009",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car9_image.jpg",
+        pos: new pc.Vec3(-11.047, 1.426, -15.819)
+    },
+    {
+        name: "Car10",
+        count: "1.1w",
+        series:"test0010",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car10_image.jpg",
+        pos: new pc.Vec3(-16.693, 1.426, -9.382)
+    },
+    {
+        name: "Car11",
+        count: "1.1w",
+        series:"test0011",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car11_image.jpg",
+        pos: new pc.Vec3(-18.979, 1.426, -0.863)
+    },
+    {
+        name: "Car12",
+        count: "1.1w",
+        series:"test0012",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car12_image.jpg",
+        pos: new pc.Vec3(-17.714, 1.426, 7.71)
+    },
+    {
+        name: "Car13",
+        count: "1.1w",
+        series:"test0013",
+        model:"car_001.json",
+        logo:"logo.png",
+        image:"car13_image.jpg",
+        pos: new pc.Vec3(-4.511, 1.426, 18.844)
     },
 ];    
 
