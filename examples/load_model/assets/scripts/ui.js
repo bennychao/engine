@@ -144,7 +144,7 @@ Ui.prototype.initialize = function (){
             document.body.removeChild(self);
             //cur.div.remove();
         }
-    });
+    }, this);
 };
 
 
@@ -172,7 +172,7 @@ Ui.prototype.bindAssets = function () {
     this.div = document.createElement('div');
     this.div.classList.add(this.class + '_container');
     this.div.setAttribute('id', 'uiItem_' + this.entity.name);
-     
+     this.div.setAttribute('v-show', "show");
     if (this.entity.element)        
     {
         this.div.setAttribute('v-bind:style', "{ top: posY + 'px', left: posX + 'px', transform: 'scale(' + posZ+ ')', width : width + 'px', height:height + 'px'}");
@@ -219,6 +219,7 @@ Ui.prototype.bindAssets = function () {
     this.uiItem =new Vue({
         el: '#uiItem_' + this.entity.name,
         data: {
+            show: true,
             count: 80,
             posX: 80,
             posY: 100,
@@ -288,6 +289,14 @@ Ui.prototype.updateUIPos = function() {
         }
 
     }
+};
+
+Ui.prototype.showUI =function(){
+     this.uiItem.show = true;
+};
+
+Ui.prototype.hideUI =function(){
+     this.uiItem.show = false;
 };
 
 Ui.prototype.bindEvents = function() {

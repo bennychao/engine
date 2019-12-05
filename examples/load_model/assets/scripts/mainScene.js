@@ -243,6 +243,9 @@ MainScene.prototype.loadCars = function(dt) {
                 var pos = c.pos.clone();
                 pos.y = tt.getPosition().y;
                 
+                tt.findByName("hint1").name = car.name + "hint1";
+                tt.findByName("hint2").name = car.name + "hint2";
+                
                 tt.setLocalPosition(pos);
                 tt.enabled = true;
                 cur.app.root.addChild(tt);

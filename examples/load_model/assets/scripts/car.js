@@ -21,8 +21,8 @@ Car.prototype.initialize = function() {
         return node.camera; // player
     });
     this.camera = cameras[0];
-    this.entity.on("onCollisionEnter", this.onEnter);
-    this.entity.on("onCollisionLeave", this.onLeave);
+    this.entity.on("onCollisionEnter", this.onEnter, this);
+    this.entity.on("onCollisionLeave", this.onLeave, this);
     
     
     this.entity.element.on("mousedown", this._onMouseDown, this);
@@ -85,6 +85,11 @@ Car.prototype.initialize = function() {
         });
     
     }
+    
+    this.entity.parent.on("faceTo", function(){
+        cur.showHint();
+        
+    }, this);
 };
 
 // update code called every frame
@@ -140,6 +145,8 @@ Car.prototype._onMouseUp = function (e) {
     this.camera.fire("onSteerStop", null);
     
     var cur = new pc.Vec2(e.x, e.y);
+    if (!this.curPos)
+        return;
     
     cur.sub(this.curPos);
     
@@ -147,22 +154,22 @@ Car.prototype._onMouseUp = function (e) {
         //click
         //this.entity.fire("click", this.entity);
         
-        this.autoShow();
+        //this.autoShow(); 
         this.showHint();
     }
 };
+   
+Car.prototype.autoShow = function () {  
 
-Car.prototype.autoShow = function () {
-
-    var car = this;
+    var car = this;  
     var timesRun = 0;
     
     var interval = setInterval(function(){
 
         car.curAngle = 10;
         car.curAngle %= 360;  
-        var asset = this.findTex(this.curAngle);
-        var e = this.entity.children[0].element;
+        var asset = car.findTex(car.curAngle);
+        var e = car.entity.children[0].element;
         e.textureAsset = asset;
         
         timesRun += 1;
@@ -179,11 +186,14 @@ Car.prototype.autoShow = function () {
 
 Car.prototype.showHint = function (e) {
 
-    this.entity.findByName("hint1").script.ui.enabled = true;
-    this.entity.findByName("hint1").script.ui.uiItem.string = "Test 001 1.1W !!";
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").enabled = true;
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.uiItem.string = "Test 001 1.1W !!";
     
-    this.entity.findByName("hint2").script.ui.enabled = true;
-    this.entity.findByName("hint2").script.ui.uiItem.string = "Test 001 1.1W !!";
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").enabled = true;
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.uiItem.string = "Test 001 1.1W !!";
+    
+        this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.showUI();
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.showUI();
     
     
     var cur = this;
@@ -194,8 +204,12 @@ Car.prototype.showHint = function (e) {
 
 Car.prototype.hideHint = function (e) {
 
-    this.entity.findByName("hint1").script.ui.enabled = false;
-    this.entity.findByName("hint2").script.ui.enabled = false;
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").enabled = false;
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").enabled = false;
+    
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.hideUI();
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.hideUI();
+    
 };
 
 Car.prototype.findTex = function (angle) {

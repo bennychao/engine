@@ -6,8 +6,8 @@ FaceTo.prototype.initialize = function() {
         return node.camera; // player
     });
     this.camera = cameras[0];
-    this.entity.on("onCollisionEnter", this.onEnter);
-    this.entity.on("onCollisionLeave", this.onLeave);
+    this.entity.on("onCollisionEnter", this.onEnter, this);
+    this.entity.on("onCollisionLeave", this.onLeave, this);
 };
 
 // update code called every frame
