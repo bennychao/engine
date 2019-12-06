@@ -38,9 +38,19 @@
         <div class="row">
             <div class="col-xs-6">
                 <div class="row select_row">
-                    <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.couponSelected">
-                        <option :value="coupon.id" v-for="coupon in subdata.couponList" >{{coupon.name}}</option>
-                    </select>
+                        <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle col-xs-12" type="button" id="menu1" data-toggle="dropdown">教程
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                            <li role="presentation" class="dropdown-header">下拉菜单标题 1</li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="dropdown-header">下拉菜单标题 2</li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">关于我们</a></li>
+                        </ul>
+                        </div>
                 </div>
                 <div class="row select_row">
                     <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.couponSelected">

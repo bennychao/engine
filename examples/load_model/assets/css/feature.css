@@ -1,0 +1,19 @@
+.select_row{
+    padding-top: 10px;
+}
+
+
+.feature_container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    
+    background-color: #222;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px;
+    transform: translate(-50%, -50%);
+
+    box-shadow: 0 0 16px rgba(0, 0, 0, .3);
+    transform-origin: 0 0;
+}

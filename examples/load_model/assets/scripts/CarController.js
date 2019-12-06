@@ -17,6 +17,8 @@ CarController.prototype.initialize = function () {
     this.initCarDetailUIs();
     this.InitShareUI();
     this.initTitle();
+    this.initFeature();
+    this.initSubscribe();
     
     var target = getQueryVariable("car");
     if (target){
@@ -85,7 +87,10 @@ CarController.prototype.update = function (dt) {
 };
 
 
+
 // title function
+
+
 CarController.prototype.initTitle = function (dt) {
     this.titleDetail = this.entity.findByName("TitleDetail");
 
@@ -94,6 +99,88 @@ CarController.prototype.initTitle = function (dt) {
         cur.titleDetail.fire("changeData", "my title is good");
     }, this);
 };
+
+CarController.prototype.initSubscribe = function (dt) {
+    this.SubscribeButton = this.entity.findByName("SubscribeButton");
+
+    var cur = this;
+    this.SubscribeButton.on("click", function(){
+        cur.showFeature();
+    });
+
+};
+
+// feature functions
+CarController.prototype.initFeature = function (dt) {
+    this.featurePanel = this.entity.findByName("FeaturesPanel");
+
+    var cur = this;
+    this.featurePanel.script.ui.bindVueSubData = {
+        couponList:[
+            {
+                id: 'A',
+                name: '优惠券1'
+            },
+            {
+                id: '1',
+                name: '优惠券2'
+            },
+            {
+                id: '2',
+                name: '优惠券3'
+            }
+        ],
+        couponSelected: '1',
+    };
+
+    this.featurePanel.script.ui.bindJs = function(){
+        //$('#sharer').append("<div class='social-share'></div>");
+        // $.getScript('https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js',function(){
+        // });
+        $('.selectpicker').selectpicker({});
+    };
+
+    
+    this.featurePanel.on("onCancel", function(){
+        cur.hideFeature();
+    });
+
+    this.featurePanel.enabled = false;
+};
+
+CarController.prototype.showFeature = function () {
+    this.featurePanel.enabled = true;
+    
+    this.camera.script.first_person_camera.noClickArea.push(
+        new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
+
+    this.featurePanel.script.ui.showUI();
+
+    var position = {y : 0};
+    var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
+    .onStart(function () {
+
+    })
+    .onUpdate(function () {
+        // pos.y = position.y;
+
+        // cur.carNavPanel.setLocalPosition(pos);
+    })
+    .onStop(function () {
+    })
+    .start();
+};
+
+CarController.prototype.hideFeature = function () {
+
+    this.camera.script.first_person_camera.noClickArea.pop();
+    this.featurePanel.enabled = false;
+
+    this.featurePanel.script.ui.hideUI();
+};
+
+
 
 //detail functions
 

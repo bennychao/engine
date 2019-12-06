@@ -229,7 +229,11 @@ Ui.prototype.bindAssets = function () {
     this.camera =  node.script.first_person_camera;
     
     this.cameraNode = node;
-    
+
+    //this.bindVueSubData = null;
+
+    var bindVueSubData  = this.bindVueSubData;
+
     this.uiItem =new Vue({
         el: '#uiItem_' + this.entity.name,
         data: {
@@ -240,7 +244,10 @@ Ui.prototype.bindAssets = function () {
             posZ: 1,
             width: 100,
             height: 60,
-            string: "1.1w"
+            string: "1.1w",
+
+            subdata: bindVueSubData
+
         },
          methods: {
             OnOk: function (event) {

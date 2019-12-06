@@ -1,21 +1,24 @@
 var vm = new Vue({
     el: '#app',
     data:{
-        couponList:[
-            {
-                id: 'A',
-                name: '优惠券1'
-            },
-            {
-                id: '1',
-                name: '优惠券2'
-            },
-            {
-                id: '2',
-                name: '优惠券3'
-            }
-        ],
-        couponSelected: '1',
+        subdata:{
+            couponList:[
+                {
+                    id: 'A',
+                    name: '优惠券1'
+                },
+                {
+                    id: '1',
+                    name: '优惠券2'
+                },
+                {
+                    id: '2',
+                    name: '优惠券3'
+                }
+            ],
+            couponSelected: '1',
+        }
+
     },
     created(){
 　　　　　　　　　　　　//如果没有这句代码，select中初始化会是空白的，默认选中就无法实现
