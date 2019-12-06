@@ -16,6 +16,7 @@ CarController.prototype.initialize = function () {
     this.initCarNavUIs();
     this.initCarDetailUIs();
     this.InitShareUI();
+    this.initTitle();
     
     var target = getQueryVariable("car");
     if (target){
@@ -84,7 +85,15 @@ CarController.prototype.update = function (dt) {
 };
 
 
+// title function
+CarController.prototype.initTitle = function (dt) {
+    this.titleDetail = this.entity.findByName("TitleDetail");
 
+    var cur = this;
+    this.titleDetail.on("bindAssets", function(){
+        cur.titleDetail.fire("changeData", "my title is good");
+    }, this);
+};
 
 //detail functions
 

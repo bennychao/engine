@@ -16,6 +16,13 @@ FirstPersonCamera.attributes.add('ground', {
     description: 'The Ground Entity'
 });
 
+//for static no click area check, which is not the element
+//support dynamic area insert,  
+FirstPersonCamera.attributes.add("noClickArea", {
+    type: "vec4", 
+    array: true
+});
+
 FirstPersonCamera.prototype.initialize = function () {
     // Camera euler angle rotation around x and y axes
     var eulers = this.entity.getLocalEulerAngles();
@@ -72,6 +79,14 @@ FirstPersonCamera.prototype.initialize = function () {
         mouse.off();
         //this.entity.off();
     }, this);
+
+    //add the no click area
+
+    this.noClickArea.push(new pc.Vec4(this.mainUI.screen.resolution.x - 200, this.mainUI.screen.resolution.y - 200, 200, 200));
+
+    this.noClickArea.push(new pc.Vec4(0, this.mainUI.screen.resolution.y - 200, 200, 200));
+    
+    this.noClickArea.push(new pc.Vec4(this.mainUI.screen.resolution.x - 200, 0, 200, 55));
 };
 
 FirstPersonCamera.prototype.update = function (dt) {
@@ -159,7 +174,10 @@ FirstPersonCamera.prototype.onMouseMove = function (event) {
 
 FirstPersonCamera.prototype.onMouseDown = function (event) {
     // When the mouse button is clicked try and capture the pointer
-    if (!this.bSteering && !this.bTargeting && !this.bMouseDown && !this.checkClickInUI(new pc.Vec2(event.x, event.y))) {  // && !pc.Mouse.isPointerLocked()
+    if (!this.bSteering && !this.bTargeting && !this.bMouseDown 
+        && !this.checkClickInUI(new pc.Vec2(event.x, event.y))
+        && !this.checkClickInStaticArea(new pc.Vec2(event.x, event.y))
+        ) {  // && !pc.Mouse.isPointerLocked()
         //this.app.mouse.enablePointerLock();
         this.bMouseDown = true;
         this.startPos = new pc.Vec2(event.x, event.y);
@@ -531,22 +549,30 @@ FirstPersonCamera.prototype.checkClickInUI = function (pos) {
     
     var cur = this;
     this.inputs = this.mainUI.children.filter(function(node) {
-        return node.element && node.element.useInput; // player
+        return node.enabled && node.element && node.element.useInput; // player
     });
 
     var node = this.inputs.find(function (node){
        
         var rect = cur.calculateElementPos(node.element);
         
-        var pivotX = (node.element.pivot.x * (ret.z));
+        var pivotX = (node.element.pivot.x * (rect.z));
         var curX = node.getLocalPosition().x;
 
-        var pivotY = (nodeelement.pivot.y * (ret.w));
+        var pivotY = (node.element.pivot.y * (rect.w));
         var curY = node.getLocalPosition().y;
         
         return pos.x > rect.x && pos.y > rect.y && (rect.x + rect.z) > pos.x && (rect.y + rect.w) > pos.y;
     });
     
+    return node !== null && node !== undefined;
+};
+
+FirstPersonCamera.prototype.checkClickInStaticArea = function (pos) {   
+    var node =  this.noClickArea.find(function (rect){
+        return pos.x > rect.x && pos.y > rect.y && (rect.x + rect.z) > pos.x && (rect.y + rect.w) > pos.y;
+    });
+
     return node !== null && node !== undefined;
 };
 
