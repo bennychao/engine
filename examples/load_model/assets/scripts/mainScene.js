@@ -31,8 +31,8 @@ function getQueryVariable(variable) {
 var cars = [
     {
         name: "Car1",
-        count: "1.1w",
-        series:"test001",
+        count: "21.1w人",
+        series:"博越",
         model:"car_001.json",
         logo:"logo.png",
         image:"car1_image.jpg",
@@ -40,9 +40,9 @@ var cars = [
     },
     {
         name: "Car2",
-        count: "1.1w",
+        count: "11.1w人",
         
-        series:"test002",
+        series:"领界",
         model:"car_001.json",
         logo:"logo.png",
         image:"car2_image.jpg",
@@ -50,9 +50,9 @@ var cars = [
     },
     {
         name: "Car3",
-        count: "1.1w",
+        count: "10.5w人",
         
-        series:"test003",
+        series:"宋Pro",
         model:"car_001.json",
         logo:"logo.png",
         image:"car3_image.jpg",
@@ -60,9 +60,9 @@ var cars = [
     },
     {
         name: "Car4",
-        count: "1.1w",
+        count: "11.5w人",
         
-        series:"test004",
+        series:"恩域",
         model:"car_001.json",
         logo:"logo.png",
         image:"car4_image.jpg",
@@ -71,8 +71,8 @@ var cars = [
 
     {
         name: "Car5",
-        count: "1.1w",
-        series:"test005",
+        count: "11.1w人",
+        series:"途胜",
         model:"car_001.json",
         logo:"logo.png",
         image:"car5_image.jpg",
@@ -80,8 +80,8 @@ var cars = [
     },     
     {
         name: "Car6",
-        count: "1.1w",
-        series:"test006",
+        count: "1.1w人",
+        series:"胜达",
         model:"car_001.json",
         logo:"logo.png",
         image:"car6_image.jpg",
@@ -89,8 +89,8 @@ var cars = [
     },
     {
         name: "Car7",
-        count: "1.1w",
-        series:"test007",
+        count: "11.1w人",
+        series:"名图",
         model:"car_001.json",
         logo:"logo.png",
         image:"car7_image.jpg",
@@ -98,8 +98,8 @@ var cars = [
     },
     {
         name: "Car8",
-        count: "1.1w",
-        series:"test008",
+        count: "3.9w人",
+        series:"途锐",
         model:"car_001.json",
         logo:"logo.png",
         image:"car8_image.jpg",
@@ -107,8 +107,8 @@ var cars = [
     },
     {
         name: "Car9",
-        count: "1.1w",
-        series:"test009",
+        count: "18.1w人",
+        series:"探岳",
         model:"car_001.json",
         logo:"logo.png",
         image:"car9_image.jpg",
@@ -116,8 +116,8 @@ var cars = [
     },
     {
         name: "Car10",
-        count: "1.1w",
-        series:"test0010",
+        count: "11.1w人",
+        series:"楼兰",
         model:"car_001.json",
         logo:"logo.png",
         image:"car10_image.jpg",
@@ -125,8 +125,8 @@ var cars = [
     },
     {
         name: "Car11",
-        count: "1.1w",
-        series:"test0011",
+        count: "21.1w人",
+        series:"东风风神AX7",
         model:"car_001.json",
         logo:"logo.png",
         image:"car11_image.jpg",
@@ -134,8 +134,8 @@ var cars = [
     },
     {
         name: "Car12",
-        count: "1.1w",
-        series:"test0012",
+        count: "11.1w人",
+        series:"宝马3系",
         model:"car_001.json",
         logo:"logo.png",
         image:"car12_image.jpg",
@@ -143,8 +143,8 @@ var cars = [
     },
     {
         name: "Car13",
-        count: "1.1w",
-        series:"test0013",
+        count: "1.1w人",
+        series:"红旗HS7",
         model:"car_001.json",
         logo:"logo.png",
         image:"car13_image.jpg",

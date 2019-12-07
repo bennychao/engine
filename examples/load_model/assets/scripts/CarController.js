@@ -116,21 +116,36 @@ CarController.prototype.initFeature = function (dt) {
 
     var cur = this;
     this.featurePanel.script.ui.bindVueSubData = {
-        couponList:[
+        series:[
             {
                 id: 'A',
-                name: '优惠券1'
+                name: '2019款 1.6T 铂金版'
             },
             {
                 id: '1',
-                name: '优惠券2'
+                name: '2020款 2.0T 旗舰版'
             },
             {
                 id: '2',
-                name: '优惠券3'
+                name: '2020款 2.0T 钻石版'
             }
         ],
-        couponSelected: '1',
+        seriesSelected: '1',
+        models:[
+            {
+                id: 'A',
+                name: '2019款 1.6T 铂金版'
+            },
+            {
+                id: '1',
+                name: '2020款 2.0T 旗舰版'
+            },
+            {
+                id: '2',
+                name: '2020款 2.0T 钻石版'
+            }
+        ],
+        modelsSelected: '1',
     };
 
     this.featurePanel.script.ui.bindJs = function(){
