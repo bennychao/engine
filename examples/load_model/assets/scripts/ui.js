@@ -284,7 +284,7 @@ Ui.prototype.update = function(dt) {
         if (this.ifSupportZ)
         {
             if (coord.z > 0)
-                this.uiItem.posZ = Math.max (0, this.farZ - coord.z) / this.farZ;
+                this.uiItem.posZ = Math.max (0, this.farZ - coord.z) * 2 / this.farZ;
             else
                 this.uiItem.posZ = 0;
         }

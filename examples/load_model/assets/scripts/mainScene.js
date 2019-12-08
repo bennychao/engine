@@ -103,7 +103,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"car8_image.jpg",
-        pos: new pc.Vec3(-2.854, 1.426, -19.012)
+        pos: new pc.Vec3(-12.459, 1.426, 14.778)
     },
     {
         name: "Car9",
@@ -197,14 +197,14 @@ MainScene.prototype.initialize = function() {
     this.ExitBtn = this.entity.findByName("Exit");
     if (this.ExitBtn){
         this.ExitBtn.on("click", function(e){
-            
+            cur.mainUI.script.carController.showShareUI();
         });
     }
     
     this.ShareBtn = this.entity.findByName("Share");
     if (this.ShareBtn){
         this.ShareBtn.on("click", function(e){
-            cur.mainUI.script.carController.showShareUI();
+           
         });
     }
     

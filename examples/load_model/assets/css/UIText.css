@@ -9,13 +9,12 @@
     font-weight: 100;
 
     pointer-events: none;
-    box-shadow: 0 0 16px rgba(0, 0, 0, .3);
-    
+    vertical-align:middle;
     text-align: center;
 }
 
 
 .text_container > .text {
+    padding:5px;
     pointer-events: none;
-    padding: 8px;
 }

@@ -187,10 +187,10 @@ Car.prototype.autoShow = function () {
 Car.prototype.showHint = function (e) {
 
     this.entity.parent.findByName(this.entity.parent.name + "hint1").enabled = true;
-    this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.uiItem.string = "Test 001 1.1W !!";
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.uiItem.string = "关注热度50%";
     
     this.entity.parent.findByName(this.entity.parent.name + "hint2").enabled = true;
-    this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.uiItem.string = "Test 001 1.1W !!";
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.uiItem.string = "关注热度50%";
     
         this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.showUI();
     this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.showUI();
@@ -199,7 +199,7 @@ Car.prototype.showHint = function (e) {
     var cur = this;
     setTimeout(function () {
         cur.hideHint();
-    }, 3000);
+    }, 30000);
 };
 
 Car.prototype.hideHint = function (e) {

@@ -96,7 +96,7 @@ CarController.prototype.initTitle = function (dt) {
 
     var cur = this;
     this.titleDetail.on("bindAssets", function(){
-        cur.titleDetail.fire("changeData", "my title is good");
+        cur.titleDetail.fire("changeData", "当前累计参与人次7202.4万");
     }, this);
 };
 
@@ -114,20 +114,28 @@ CarController.prototype.initSubscribe = function (dt) {
 CarController.prototype.initFeature = function (dt) {
     this.featurePanel = this.entity.findByName("FeaturesPanel");
 
+    
+
     var cur = this;
+
+    this.featurePanel.on("bindAssets", function(){
+        cur.featurePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.featurePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+    });
+
     this.featurePanel.script.ui.bindVueSubData = {
         series:[
             {
                 id: 'A',
-                name: '2019款 1.6T 铂金版'
+                name: '博越'
             },
             {
                 id: '1',
-                name: '2020款 2.0T 旗舰版'
+                name: '领界'
             },
             {
                 id: '2',
-                name: '2020款 2.0T 钻石版'
+                name: '宋Pro'
             }
         ],
         seriesSelected: '1',
@@ -164,10 +172,12 @@ CarController.prototype.initFeature = function (dt) {
 };
 
 CarController.prototype.showFeature = function () {
+    var cur = this;
     this.featurePanel.enabled = true;
     
     this.camera.script.first_person_camera.noClickArea.push(
         new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
 
 
     this.featurePanel.script.ui.showUI();
@@ -221,7 +231,7 @@ CarController.prototype.initCarDetailUIs = function (dt) {
     var rect = calculateElementPos(this.carDetailUI.element);
     
     
-    var newH = rect.z * 0.195;
+    var newH = rect.z * 0.21;
     
     this.curDetailUIHeight = newH;
     
@@ -282,11 +292,12 @@ CarController.prototype.onClickDetail = function (btn){
                singleMainScene.loadScene(SubSceneId, null);
                break;
            case "Item2": 
-               //change color
-               this.showChangeColorUI();
+
                    
                break;
            case "Item3":
+                //change color
+                this.showChangeColorUI();
                break;
                    
            case "Item4":

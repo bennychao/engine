@@ -1,10 +1,26 @@
 var FaceTo = pc.createScript('faceTo');
 
+FaceTo.attributes.add('drawOrder', {
+    type: 'number',
+    title: 'drawOrder',
+    default: 1
+});
+
 // initialize code called once per entity
 FaceTo.prototype.initialize = function() {
+    var cur = this;
     var cameras = this.app.root.find(function(node) {
         return node.camera; // player
     });
+
+    var subs = this.entity.find(function(node){
+        return node.element;
+    });
+
+    subs.forEach(element => {
+        element.drawOrder = cur.drawOrder;
+    });
+
     this.camera = cameras[0];
     this.entity.on("onCollisionEnter", this.onEnter, this);
     this.entity.on("onCollisionLeave", this.onLeave, this);
