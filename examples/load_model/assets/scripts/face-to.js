@@ -17,13 +17,28 @@ FaceTo.prototype.initialize = function() {
         return node.element;
     });
 
-    subs.forEach(element => {
-        element.drawOrder = cur.drawOrder;
-    });
+    // subs.forEach(element => {
+    //     element.drawOrder = cur.drawOrder;
+    // });
 
     this.camera = cameras[0];
     this.entity.on("onCollisionEnter", this.onEnter, this);
     this.entity.on("onCollisionLeave", this.onLeave, this);
+
+    var curE = this.entity;
+    var root = cur.entity.parent;
+
+    if (this.drawOrder >=10){
+        
+        this.drawOrder = 2;
+        setTimeout(function(){
+            root.removeChild(curE);
+            curE.enabled = false;
+            curE = curE.clone();
+            root.addChild(curE); 
+             curE.enabled = true;
+        }, 500);
+    }
 };
 
 // update code called every frame
