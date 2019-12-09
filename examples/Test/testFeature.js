@@ -42,9 +42,11 @@ var vm = new Vue({
 
         getCouponSelected() {
             //获取选中的优惠券
-            console.log(this.couponSelected)
+            console.log(this.couponSelected);
         },
-
+        OnCancel: function (event) {
+            console.log("");
+        },
         OnClick: function (event) {
             switch (event.target.id) {
                 case "incomebtn1":

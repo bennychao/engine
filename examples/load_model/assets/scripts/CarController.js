@@ -208,8 +208,8 @@ CarController.prototype.initFeature2 = function (dt) {
     var cur = this;
 
     this.featurePanel2.on("bindAssets", function(){
-        cur.featurePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
-        cur.featurePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+        cur.featurePanel2.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.featurePanel2.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
     });
 
     this.featurePanel2.script.ui.bindVueSubData = {
@@ -262,7 +262,7 @@ CarController.prototype.initFeature2 = function (dt) {
 
 CarController.prototype.showFeature2 = function () {
     var cur = this;
-    this.featurePanel.enabled = true;
+    this.featurePanel2.enabled = true;
     
     this.camera.script.first_person_camera.noClickArea.push(
         new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
@@ -300,8 +300,8 @@ CarController.prototype.initFeature3 = function (dt) {
     var cur = this;
 
     this.featurePanel3.on("bindAssets", function(){
-        cur.featurePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
-        cur.featurePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+        cur.featurePanel3.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.featurePanel3.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
     });
 
     this.featurePanel3.script.ui.bindVueSubData = {
@@ -447,6 +447,57 @@ CarController.prototype.hideFeature3 = function () {
     this.featurePanel3.enabled = false;
 
     this.featurePanel3.script.ui.hideUI();
+};
+
+
+// init vrframe 
+CarController.prototype.initVRframe = function (dt) {
+    this.vrframePanel = this.entity.findByName("vrframePanel");
+
+    var cur = this;
+
+    // this.vrframePanel.on("bindAssets", function(){
+    //     cur.vrframePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+    //     cur.vrframePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+    // });
+    
+    this.vrframePanel.on("onCancel", function(){
+        cur.hideVRframe();
+    });
+
+    this.vrframePanel.enabled = false;
+};
+
+CarController.prototype.showVRframe = function () {
+    var cur = this;
+    this.vrframePanel.enabled = true;
+    
+    this.camera.script.first_person_camera.noClickArea.push(
+        new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
+    this.vrframePanel.script.ui.showUI();
+
+    var position = {y : 0};
+    var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
+    .onStart(function () {
+
+    })
+    .onUpdate(function () {
+        // pos.y = position.y;
+
+        // cur.carNavPanel.setLocalPosition(pos);
+    })
+    .onStop(function () {
+    })
+    .start();
+};
+
+CarController.prototype.hideVRframe = function () {
+
+    this.camera.script.first_person_camera.noClickArea.pop();
+    this.vrframePanel.enabled = false;
+
+    this.vrframePanel.script.ui.hideUI();
 };
 
 
