@@ -192,10 +192,16 @@ Car.prototype.showHint = function (e) {
     this.entity.parent.findByName(this.entity.parent.name + "hint2").enabled = true;
     this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.uiItem.string = "关注热度50%";
     
-        this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.showUI();
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.showUI();
     this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.showUI();
     
-    
+    var mainUI = this.app.root.findByName("MainUI");
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").on("onClick", function(){
+        mainUI.script.carController.showHintDetailUI();
+    });
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").on("onClick", function(){
+        mainUI.script.carController.showHintDetailUI();
+    });
     var cur = this;
     setTimeout(function () {
         cur.hideHint();
@@ -209,7 +215,9 @@ Car.prototype.hideHint = function (e) {
     
     this.entity.parent.findByName(this.entity.parent.name + "hint1").script.ui.hideUI();
     this.entity.parent.findByName(this.entity.parent.name + "hint2").script.ui.hideUI();
-    
+
+    this.entity.parent.findByName(this.entity.parent.name + "hint1").off("onClick");
+    this.entity.parent.findByName(this.entity.parent.name + "hint2").off("onClick");
 };
 
 Car.prototype.findTex = function (angle) {
@@ -226,6 +234,10 @@ Car.prototype.findTex = function (angle) {
         }
     
     return ar.asset;
+};
+
+Car.prototype.showHintDetail = function () {
+
 };
 
 // swap method called for script hot-reloading

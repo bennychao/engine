@@ -1126,6 +1126,59 @@ CarController.prototype.hideShareUI = function () {
         tweenA.stop();
     }, 301);
 };
+
+///for hint detail UI
+
+// init feature2 
+CarController.prototype.initHintDetailUI = function (dt) {
+    this.hintDetailPanel = this.entity.findByName("HintDetailPanel");
+
+    var cur = this;
+
+    this.hintDetailPanel.on("bindAssets", function(){
+        cur.hintDetailPanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.hintDetailPanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+    });
+    
+    this.hintDetailPanel.on("onCancel", function(){
+        cur.hideHintDetailUI();
+    });
+
+    this.hintDetailPanel.enabled = false;
+};
+
+CarController.prototype.showHintDetailUI = function () {
+    var cur = this;
+    this.hintDetailPanel.enabled = true;
+    
+    this.camera.script.first_person_camera.noClickArea.push(
+        new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
+    this.hintDetailPanel.script.ui.showUI();
+
+    var position = {y : 0};
+    var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
+    .onStart(function () {
+
+    })
+    .onUpdate(function () {
+        // pos.y = position.y;
+
+        // cur.carNavPanel.setLocalPosition(pos);
+    })
+    .onStop(function () {
+    })
+    .start();
+};
+
+CarController.prototype.hideHintDetailUI = function () {
+
+    this.camera.script.first_person_camera.noClickArea.pop();
+    this.hintDetailPanel.enabled = false;
+
+    this.hintDetailPanel.script.ui.hideUI();
+};
+
 // swap method called for script hot-reloading
 // inherit your script state here
 // CarController.prototype.swap = function(old) { };
