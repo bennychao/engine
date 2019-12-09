@@ -18,7 +18,10 @@ CarController.prototype.initialize = function () {
     this.InitShareUI();
     this.initTitle();
     this.initFeature();
+    this.initFeature2();
+    this.initFeature3();
     this.initSubscribe();
+    this.initVRframe();    
     
     var target = getQueryVariable("car");
     if (target){
@@ -106,7 +109,7 @@ CarController.prototype.initSubscribe = function (dt) {
     var cur = this;
     this.SubscribeButton.on("click", function(){
         cur.showFeature();
-    });
+    }, this);
 
 };
 
@@ -164,7 +167,7 @@ CarController.prototype.initFeature = function (dt) {
     
     this.featurePanel.on("onCancel", function(){
         cur.hideFeature();
-    });
+    }, this);
 
     this.featurePanel.enabled = false;
 };
@@ -255,7 +258,7 @@ CarController.prototype.initFeature2 = function (dt) {
     
     this.featurePanel2.on("onCancel", function(){
         cur.hideFeature2();
-    });
+    }, this);
 
     this.featurePanel2.enabled = false;
 };
@@ -360,59 +363,59 @@ CarController.prototype.initFeature3 = function (dt) {
     
     this.featurePanel3.on("onCancel", function(){
         cur.hideFeature3();
-    });
+    }, this);
 
     this.featurePanel3.on("onClick", function(event){
         switch (event.target.id) {
             case "incomebtn1":
-                this.subdata.income1 = { 'btn-warning': true };
-                this.subdata.income2 = { 'btn-warning': false };
-                this.subdata.income3 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income1 = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.income2 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income3 = { 'btn-warning': false };
                 break;
             case "incomebtn2":
-                this.subdata.income1 = { 'btn-warning': false };
-                this.subdata.income2 = { 'btn-warning': true };
-                this.subdata.income3 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income1 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income2 = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.income3 = { 'btn-warning': false };
                 break;
 
             case "incomebtn3":
-                this.subdata.income1 = { 'btn-warning': false };
-                this.subdata.income2 = { 'btn-warning': false };
-                this.subdata.income3 = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.income1 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income2 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.income3 = { 'btn-warning': true };
                 break;
             case "datebtn1":
-                this.subdata.is30 = { 'btn-warning': true };
-                this.subdata.is60 = { 'btn-warning': false };
-                this.subdata.isOther = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.is30 = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.is60 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.isOther = { 'btn-warning': false };
                 break;
             case "datebtn2":
-                this.subdata.is30 = { 'btn-warning': false };
-                this.subdata.is60 = { 'btn-warning': true };
-                this.subdata.isOther = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.is30 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.is60 = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.isOther = { 'btn-warning': false };
                 break;
             case "datebtn3":
-                this.subdata.is30 = { 'btn-warning': false };
-                this.subdata.is60 = { 'btn-warning': false };
-                this.subdata.isOther = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.is30 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.is60 = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.isOther = { 'btn-warning': true };
                 break;
             case "socialbtn1":
-                this.subdata.isSocial = { 'btn-warning': true };
-                this.subdata.noSocial = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.isSocial = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.noSocial = { 'btn-warning': false };
                 break;
             case "socialbtn2":
-                this.subdata.isSocial = { 'btn-warning': false };
-                this.subdata.noSocial = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.isSocial = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.noSocial = { 'btn-warning': true };
                 break;
             case "seenbtn1":
-                this.subdata.isSeen = { 'btn-warning': true };
-                this.subdata.noSeen = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.isSeen = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.noSeen = { 'btn-warning': false };
                 break;
             case "seenbtn2":
-                this.subdata.isSeen = { 'btn-warning': false };
-                this.subdata.noSeen = { 'btn-warning': true };
+                this.featurePanel3.script.ui.bindVueSubData.isSeen = { 'btn-warning': false };
+                this.featurePanel3.script.ui.bindVueSubData.noSeen = { 'btn-warning': true };
                 break;
         }
-    });
+    }, this);
 
     this.featurePanel3.enabled = false;
 };
@@ -456,14 +459,16 @@ CarController.prototype.initVRframe = function (dt) {
 
     var cur = this;
 
-    // this.vrframePanel.on("bindAssets", function(){
-    //     cur.vrframePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
-    //     cur.vrframePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
-    // });
+    this.vrframePanel.on("bindAssets", function(){
+        // cur.vrframePanel.script.ui.uiItem.posX = -(cur.entity.screen.resolution.x) / 2;
+        // cur.vrframePanel.script.ui.uiItem.posY = -cur.entity.screen.resolution.y / 2;
+        cur.vrframePanel.script.ui.uiItem.posX = 0;//-(cur.entity.screen.resolution.x) / 2;
+        cur.vrframePanel.script.ui.uiItem.posY = 0;//-cur.entity.screen.resolution.y / 2;
+    });
     
     this.vrframePanel.on("onCancel", function(){
         cur.hideVRframe();
-    });
+    }, this);
 
     this.vrframePanel.enabled = false;
 };
@@ -568,7 +573,7 @@ CarController.prototype.initCarDetailUIs = function (dt) {
         
         btn.on("click", function(bDl){
            cur.onClickDetail(bDl);
-        });
+        }, this);
 
     });
 
@@ -583,11 +588,11 @@ CarController.prototype.onClickDetail = function (btn){
            switch (btn.name){
            case "Item1":
                //switch Scene
-               singleMainScene.loadScene(SubSceneId, null);
+               //singleMainScene.loadScene(SubSceneId, null);
+               this.showVRframe();
                break;
            case "Item2": 
-
-                   
+                this.showFeature2();
                break;
            case "Item3":
                 //change color
@@ -595,9 +600,11 @@ CarController.prototype.onClickDetail = function (btn){
                break;
                    
            case "Item4":
+                this.showFeature3();
                break;
                    
            case "Item5":
+                this.showFeature2();
                break;               
        } 
 };
