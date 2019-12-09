@@ -1,0 +1,102 @@
+<div class="row">
+    <h2>
+        <p class="text-center">您的心仪价格</p>
+    </h2>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <div class="row select_row">
+            <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.seriesSelected">
+                <option :value="coupon.id" v-for="coupon in subdata.series">{{coupon.name}}</option>
+            </select>
+        </div>
+        <div class="row select_row">
+            <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.modelsSelected">
+                <option :value="coupon.id" v-for="coupon in subdata.models">{{coupon.name}}</option>
+            </select>
+        </div>
+
+        <div class="row select_row">
+            <div class="col-xs-8">
+                <p class="text-left"><strong>指导价（万）</strong></p>
+            </div>
+            <div class="col-xs-4">
+                <p class="text-right text-danger"><strong>12.4W</strong></p>
+            </div>
+        </div>
+        <div class="row select_row">
+            <div class="col-xs-12">
+                <p class="text-left"><strong>您的期望价格（万）</strong></p>
+            </div>
+        </div>
+        <div class="row select_row">
+            <div class="col-xs-12">
+                <input type="text" class="form-control" id="name" placeholder="请输入价格">
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="col-xs-6">
+        <div class="row select_row">
+            <div class="col-xs-6">
+                <p class="text-left"><strong>您的姓名</strong></p>
+            </div>
+            <div class="col-xs-6">
+                <input type="text" class="form-control" id="name" placeholder="请输入姓名">
+            </div>
+        </div>
+
+        <div class="row select_row">
+            <div class="col-xs-6">
+                <p class="text-left"><strong>您的手机号码</strong></p>
+            </div>
+            <div class="col-xs-6">
+                <input type="text" class="form-control" id="name" placeholder="手机号码">
+            </div>
+        </div>
+
+        <div class="row select_row">
+            <div class="col-xs-4">
+                <p class="text-left"><strong>验证码</strong></p>
+            </div>
+            <div class="col-lg-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="name" placeholder="请输入">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">获取</button>
+                    </span>
+
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8">
+                <strong>地区</strong><br>
+            </div>
+            <div class="col-xs-4">
+                <p class="text-right">
+                    <a href="#">
+                        北京<span class="glyphicon glyphicon-map-marker text-right"></span>
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row select_row">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-primary btn-lg btn-block btn-warning">开始砍价</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-xs-12">
+        <small>点击“开始砍价”即同意<cite title="Source Title"><a>《个人信息保护声明》</a></cite></small>
+    </div>
+
+</div>

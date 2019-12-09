@@ -256,6 +256,9 @@ Ui.prototype.bindAssets = function () {
             OnCancel: function (event) {
                 cur.entity.fire("onCancel");
             },
+            OnClick: function (event) {
+                cur.entity.fire("onClick", event);
+            },
          }
       });
     
@@ -284,7 +287,7 @@ Ui.prototype.update = function(dt) {
         if (this.ifSupportZ)
         {
             if (coord.z > 0)
-                this.uiItem.posZ = Math.max (0, this.farZ - coord.z) * 2 / this.farZ;
+                this.uiItem.posZ = Math.max (0, this.farZ - coord.z) * 3 / this.farZ;
             else
                 this.uiItem.posZ = 0;
         }

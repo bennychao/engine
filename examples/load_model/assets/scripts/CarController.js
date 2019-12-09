@@ -114,8 +114,6 @@ CarController.prototype.initSubscribe = function (dt) {
 CarController.prototype.initFeature = function (dt) {
     this.featurePanel = this.entity.findByName("FeaturesPanel");
 
-    
-
     var cur = this;
 
     this.featurePanel.on("bindAssets", function(){
@@ -178,8 +176,6 @@ CarController.prototype.showFeature = function () {
     this.camera.script.first_person_camera.noClickArea.push(
         new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
 
-
-
     this.featurePanel.script.ui.showUI();
 
     var position = {y : 0};
@@ -205,6 +201,253 @@ CarController.prototype.hideFeature = function () {
     this.featurePanel.script.ui.hideUI();
 };
 
+// init feature2 
+CarController.prototype.initFeature2 = function (dt) {
+    this.featurePanel2 = this.entity.findByName("FeaturesPanel2");
+
+    var cur = this;
+
+    this.featurePanel2.on("bindAssets", function(){
+        cur.featurePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.featurePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+    });
+
+    this.featurePanel2.script.ui.bindVueSubData = {
+        series:[
+            {
+                id: 'A',
+                name: '博越'
+            },
+            {
+                id: '1',
+                name: '领界'
+            },
+            {
+                id: '2',
+                name: '宋Pro'
+            }
+        ],
+        seriesSelected: '1',
+        models:[
+            {
+                id: 'A',
+                name: '2019款 1.6T 铂金版'
+            },
+            {
+                id: '1',
+                name: '2020款 2.0T 旗舰版'
+            },
+            {
+                id: '2',
+                name: '2020款 2.0T 钻石版'
+            }
+        ],
+        modelsSelected: '1',
+    };
+
+    this.featurePanel2.script.ui.bindJs = function(){
+        //$('#sharer').append("<div class='social-share'></div>");
+        // $.getScript('https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js',function(){
+        // });
+        $('.selectpicker').selectpicker({});
+    };
+
+    
+    this.featurePanel2.on("onCancel", function(){
+        cur.hideFeature2();
+    });
+
+    this.featurePanel2.enabled = false;
+};
+
+CarController.prototype.showFeature2 = function () {
+    var cur = this;
+    this.featurePanel.enabled = true;
+    
+    this.camera.script.first_person_camera.noClickArea.push(
+        new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
+    this.featurePanel2.script.ui.showUI();
+
+    var position = {y : 0};
+    var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
+    .onStart(function () {
+
+    })
+    .onUpdate(function () {
+        // pos.y = position.y;
+
+        // cur.carNavPanel.setLocalPosition(pos);
+    })
+    .onStop(function () {
+    })
+    .start();
+};
+
+CarController.prototype.hideFeature2 = function () {
+
+    this.camera.script.first_person_camera.noClickArea.pop();
+    this.featurePanel2.enabled = false;
+
+    this.featurePanel2.script.ui.hideUI();
+};
+
+
+// init feature3
+CarController.prototype.initFeature3 = function (dt) {
+    this.featurePanel3 = this.entity.findByName("FeaturesPanel3");
+
+    var cur = this;
+
+    this.featurePanel3.on("bindAssets", function(){
+        cur.featurePanel.script.ui.uiItem.posX = (cur.entity.screen.resolution.x - 600) / 2;
+        cur.featurePanel.script.ui.uiItem.posY = cur.entity.screen.resolution.y / 4;
+    });
+
+    this.featurePanel3.script.ui.bindVueSubData = {
+        series:[
+            {
+                id: 'A',
+                name: '博越'
+            },
+            {
+                id: '1',
+                name: '领界'
+            },
+            {
+                id: '2',
+                name: '宋Pro'
+            }
+        ],
+        seriesSelected: '1',
+        models:[
+            {
+                id: 'A',
+                name: '2019款 1.6T 铂金版'
+            },
+            {
+                id: '1',
+                name: '2020款 2.0T 旗舰版'
+            },
+            {
+                id: '2',
+                name: '2020款 2.0T 钻石版'
+            }
+        ],
+        modelsSelected: '1',
+        isSeen: { 'btn-warning': true },
+        noSeen: { 'btn-warning': false },
+
+        isSocial: { 'btn-warning': true },
+        noSocial: { 'btn-warning': false },
+
+        is30: { 'btn-warning': true },
+        is60: { 'btn-warning': false },
+        isOther: { 'btn-warning': false },
+
+        income1: { 'btn-warning': true },
+        income2: { 'btn-warning': false },
+        income3: { 'btn-warning': false },
+    };
+
+    this.featurePanel3.script.ui.bindJs = function(){
+        //$('#sharer').append("<div class='social-share'></div>");
+        // $.getScript('https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js',function(){
+        // });
+        $('.selectpicker').selectpicker({});
+    };
+
+    
+    this.featurePanel3.on("onCancel", function(){
+        cur.hideFeature3();
+    });
+
+    this.featurePanel3.on("onClick", function(event){
+        switch (event.target.id) {
+            case "incomebtn1":
+                this.subdata.income1 = { 'btn-warning': true };
+                this.subdata.income2 = { 'btn-warning': false };
+                this.subdata.income3 = { 'btn-warning': false };
+                break;
+            case "incomebtn2":
+                this.subdata.income1 = { 'btn-warning': false };
+                this.subdata.income2 = { 'btn-warning': true };
+                this.subdata.income3 = { 'btn-warning': false };
+                break;
+
+            case "incomebtn3":
+                this.subdata.income1 = { 'btn-warning': false };
+                this.subdata.income2 = { 'btn-warning': false };
+                this.subdata.income3 = { 'btn-warning': true };
+                break;
+            case "datebtn1":
+                this.subdata.is30 = { 'btn-warning': true };
+                this.subdata.is60 = { 'btn-warning': false };
+                this.subdata.isOther = { 'btn-warning': false };
+                break;
+            case "datebtn2":
+                this.subdata.is30 = { 'btn-warning': false };
+                this.subdata.is60 = { 'btn-warning': true };
+                this.subdata.isOther = { 'btn-warning': false };
+                break;
+            case "datebtn3":
+                this.subdata.is30 = { 'btn-warning': false };
+                this.subdata.is60 = { 'btn-warning': false };
+                this.subdata.isOther = { 'btn-warning': true };
+                break;
+            case "socialbtn1":
+                this.subdata.isSocial = { 'btn-warning': true };
+                this.subdata.noSocial = { 'btn-warning': false };
+                break;
+            case "socialbtn2":
+                this.subdata.isSocial = { 'btn-warning': false };
+                this.subdata.noSocial = { 'btn-warning': true };
+                break;
+            case "seenbtn1":
+                this.subdata.isSeen = { 'btn-warning': true };
+                this.subdata.noSeen = { 'btn-warning': false };
+                break;
+            case "seenbtn2":
+                this.subdata.isSeen = { 'btn-warning': false };
+                this.subdata.noSeen = { 'btn-warning': true };
+                break;
+        }
+    });
+
+    this.featurePanel3.enabled = false;
+};
+
+CarController.prototype.showFeature3 = function () {
+    var cur = this;
+    this.featurePanel3.enabled = true;
+    
+    this.camera.script.first_person_camera.noClickArea.push(
+        new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
+
+    this.featurePanel3.script.ui.showUI();
+
+    var position = {y : 0};
+    var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
+    .onStart(function () {
+
+    })
+    .onUpdate(function () {
+        // pos.y = position.y;
+
+        // cur.carNavPanel.setLocalPosition(pos);
+    })
+    .onStop(function () {
+    })
+    .start();
+};
+
+CarController.prototype.hideFeature3 = function () {
+
+    this.camera.script.first_person_camera.noClickArea.pop();
+    this.featurePanel3.enabled = false;
+
+    this.featurePanel3.script.ui.hideUI();
+};
 
 
 //detail functions

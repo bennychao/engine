@@ -1,81 +1,85 @@
 <div class="row">
     <h2>
-        <p class="text-center">预约试驾</p</h2> </div> <div class="row">
+        <p class="text-center">预约试驾</p>
+    </h2>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <div class="row select_row">
+            <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.seriesSelected">
+                <option :value="coupon.id" v-for="coupon in subdata.series">{{coupon.name}}</option>
+            </select>
+        </div>
+        <div class="row select_row">
+            <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.modelsSelected">
+                <option :value="coupon.id" v-for="coupon in subdata.models">{{coupon.name}}</option>
+            </select>
+        </div>
+
+        <div class="row select_row">
             <div class="col-xs-6">
-                <div class="row select_row">
-                    <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.seriesSelected">
-                        <option :value="coupon.id" v-for="coupon in subdata.series">{{coupon.name}}</option>
-                    </select>
-                </div>
-                <div class="row select_row">
-                    <select class="selectpicker col-xs-12" name="public-choice" v-model="subdata.modelsSelected">
-                        <option :value="coupon.id" v-for="coupon in subdata.models">{{coupon.name}}</option>
-                    </select>
-                </div>
-
-                <div class="row select_row">
-                    <div class="col-xs-6">
-                        <input type="text" class="form-control" id="name" placeholder="请输入名称">
-                    </div>
-                    <select class="selectpicker col-xs-6">
-                        <option>男</option>
-                        <option>女</option>
-                    </select>
-                </div>
-                <div class="row select_row">
-                    <div class="col-xs-12">
-                        <input type="text" class="form-control" id="name" placeholder="请输入手机号码">
-                    </div>
-                </div>
-                <div class="row select_row">
-                    <div class="col-xs-12">
-                        <button type="button" class="btn btn-primary btn-lg btn-block btn-warning"
-                            v-on:click="OnCancel">免费预约</button>
-                    </div>
-                </div>
-
-
+                <input type="text" class="form-control" id="name" placeholder="请输入名称">
             </div>
-
-            <div class="col-xs-6">
-                <div class="row">
-                    <div class="col-xs-8">
-                        <strong>经销商（最多选3家）</strong><br>
-                    </div>
-                    <div class="col-xs-4">
-                        <p class="text-right">
-                            <a href="#">
-                                沈阳<span class="glyphicon glyphicon-map-marker text-right"></span>
-                            </a>
-                        </p>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="checkbox checkbox-primary">
-                        <input type="checkbox" id="keywordsType" checked="checked" class="styled" />
-                        <label for="keywordsType" style=" font-size:18px;">
-                            北京奥图卡汽车销售有限公司<p><small>北京市大兴区西红门镇大生庄9号</small></p>
-                        </label>
-                    </div>
-                    <div class="checkbox checkbox-primary">
-                        <input type="checkbox" id="keywordsType1" checked="checked" class="styled" />
-                        <label for="keywordsType1" style=" font-size:18px;">
-                            北京英明基业汽车销售有限公司<p><small>北京市海淀区上庄镇西马坊路</small></p>
-                        </label>
-                    </div>
-                    <div class="checkbox checkbox-primary">
-                        <input type="checkbox" id="keywordsType2" checked="checked" class="styled" />
-                        <label for="keywordsType2" style=" font-size:18px;">
-                            北京新奇嘉瑞汽车销售有限公司<p> <small>北京市大兴区金盛大街2号院21号楼底商</small></p>
-                        </label>
-                    </div>
-                </div>
-            </div>
+            <select class="selectpicker col-xs-6">
+                <option>男</option>
+                <option>女</option>
+            </select>
+        </div>
+        <div class="row select_row">
             <div class="col-xs-12">
-                <small>点击“获取底价”即同意<cite title="Source Title"><a>个人信息保护声明</a></cite></small>
-
+                <input type="text" class="form-control" id="name" placeholder="请输入手机号码">
             </div>
+        </div>
+        <div class="row select_row">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-primary btn-lg btn-block btn-warning"
+                    v-on:click="OnCancel">免费预约</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-xs-6">
+        <div class="row">
+            <div class="col-xs-8">
+                <strong>经销商（最多选3家）</strong><br>
+            </div>
+            <div class="col-xs-4">
+                <p class="text-right">
+                    <a href="#">
+                        北京<span class="glyphicon glyphicon-map-marker text-right"></span>
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="checkbox checkbox-primary">
+                <input type="checkbox" id="keywordsType" checked="checked" class="styled" />
+                <label for="keywordsType" style=" font-size:18px;">
+                    北京奥图卡汽车销售有限公司<p><small>北京市大兴区西红门镇大生庄9号</small></p>
+                </label>
+            </div>
+            <div class="checkbox checkbox-primary">
+                <input type="checkbox" id="keywordsType1" checked="checked" class="styled" />
+                <label for="keywordsType1" style=" font-size:18px;">
+                    北京英明基业汽车销售有限公司<p><small>北京市海淀区上庄镇西马坊路</small></p>
+                </label>
+            </div>
+            <div class="checkbox checkbox-primary">
+                <input type="checkbox" id="keywordsType2" checked="checked" class="styled" />
+                <label for="keywordsType2" style=" font-size:18px;">
+                    北京新奇嘉瑞汽车销售有限公司<p> <small>北京市大兴区金盛大街2号院21号楼底商</small></p>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <small>点击“获取底价”即同意<cite title="Source Title"><a>《个人信息保护声明》</a></cite></small>
+
+    </div>
 
 </div>

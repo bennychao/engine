@@ -1,0 +1,84 @@
+<div class="row">
+        <h2>
+            <p class="text-center">测测您的贷款额度</p>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="row select_row">
+                <div class="col-xs-3">
+                    <p class="text-left"><strong>思域</strong></p>
+                </div>
+
+                <select class="selectpicker col-xs-8" name="public-choice" v-model="subdata.modelsSelected">
+                    <option :value="coupon.id" v-for="coupon in subdata.models">{{coupon.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="row select_row">
+                <div class="col-xs-7">
+                    <strong>税后收入</strong><br>
+                </div>
+            </div>
+            <div class="row select_row">
+                <div class=" col-xs-12 btn-group">
+                    <button id="incomebtn1" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.income1" v-on:click="OnClick">1万元以下</button>
+                    <button id="incomebtn2" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.income2"  v-on:click="OnClick">1~2万元</button>
+                    <button id="incomebtn3" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.income3" v-on:click="OnClick">2万元以上</button>
+                </div>
+
+            </div>
+            <div class="row select_row">
+                <div class="col-xs-7">
+                    <strong>意向购车时间</strong><br>
+                </div>
+            </div>
+
+            <div class="row select_row">
+                <div class=" col-xs-12 btn-group">
+                    <button id="datebtn1" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.is30" v-on:click="OnClick">30天内</button>
+                    <button id="datebtn2" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.is60" v-on:click="OnClick">60天内</button>
+                    <button id="datebtn3" type="button" class="btn btn-default col-xs-4" v-bind:class="subdata.isOther" v-on:click="OnClick">其它</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xs-4">
+                <div class="row select_row">
+                    <div class="col-xs-12">
+                        <strong>社保或公积金情况</strong><br>
+                    </div>
+                </div>
+
+                <div class="row select_row">
+                    <div class=" col-xs-12 btn-group">
+                        <button id="socialbtn1" type="button" class="btn btn-default col-xs-6" v-bind:class="subdata.isSocial" v-on:click="OnClick">是</button>
+                        <button id="socialbtn2" type="button" class="btn btn-default col-xs-6" v-bind:class="subdata.noSocial" v-on:click="OnClick">否</button>
+                    </div>
+                </div>
+                <div class="row select_row">
+                    <div class="col-xs-12">
+                        <strong>是否看过车</strong><br>
+                    </div>
+                </div>
+
+                <div class="row select_row">
+                    <div class=" col-xs-12 btn-group">
+                        <button id="seenbtn1" type="button" class="btn btn-default col-xs-6" v-bind:class="subdata.isSeen" v-on:click="OnClick">是</button>
+                        <button id="seenbtn2" type="button" class="btn btn-default col-xs-6" v-bind:class="subdata.noSeen" v-on:click="OnClick">否</button>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+
+    <div class="row select_row">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-primary btn-lg btn-block btn-warning">评估额度</button>
+        </div>
+    </div>
