@@ -31,7 +31,7 @@ CarController.prototype.initialize = function () {
     else{
         setTimeout(() => {
             this.showCarsNav();
-        }, 1000);
+        }, 3000);
     }
     
     this.camera = this.app.root.findByName("camera");

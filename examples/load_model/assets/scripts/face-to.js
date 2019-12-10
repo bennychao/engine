@@ -37,7 +37,7 @@ FaceTo.prototype.initialize = function() {
             curE = curE.clone();
             root.addChild(curE); 
              curE.enabled = true;
-        }, 500);
+        }, 5000);
     }
 };
 
