@@ -205,7 +205,7 @@ Car.prototype.showHint = function (e) {
     var cur = this;
     setTimeout(function () {
         cur.hideHint();
-    }, 30000);
+    }, 5000);
 };
 
 Car.prototype.hideHint = function (e) {

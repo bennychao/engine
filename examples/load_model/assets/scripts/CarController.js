@@ -31,7 +31,7 @@ CarController.prototype.initialize = function () {
     else{
         setTimeout(() => {
             this.showCarsNav();
-        }, 1000);
+        }, 3000);
     }
     
     this.camera = this.app.root.findByName("camera");
@@ -481,6 +481,11 @@ CarController.prototype.showVRframe = function () {
         new pc.Vec4(0, 0, this.entity.screen.resolution.x,  this.entity.screen.resolution.y));
 
     this.vrframePanel.script.ui.showUI();
+
+    // var _iframe1=document.getElementById('vrframenode');
+    // _iframe1.contentWindow.location.reload(true);
+    //document.frames("vrframenode").location.reload(true); 
+    document.getElementById("vrframenode").src="https://pano.autohome.com.cn/car/pano/25893#pvareaid=2023606";
 
     var position = {y : 0};
     var tweenA = new TWEEN.Tween(position).to({ y: 100 }, 300)
