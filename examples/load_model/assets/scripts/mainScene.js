@@ -36,7 +36,7 @@ var cars = [
         model:"car_001.json",
         logo:"logo.png",
         image:"car1_image.jpg",
-        pos: new pc.Vec3(10.632, 1.426, 16.57)
+        pos: new pc.Vec3(10.632, 0.994, 16.57)
     },
     {
         name: "Car2",

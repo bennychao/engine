@@ -513,6 +513,9 @@ FirstPersonCamera.prototype.angleWithDir = function (v1, v2) {
         return 0;
     
     var d = Math.acos(v1.dot(v2) / (v1.length() * v2.length()));
+    
+    if (isNaN(d))
+        d = 0;
             
     var ret = d * 180 / Math.PI;
     //ret = d;
