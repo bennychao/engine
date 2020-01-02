@@ -225,8 +225,8 @@ Ui.prototype.bindAssets = function () {
     this.mainUI = uis[0];
     
     
-    var node = this.app.root.children[0].findByName("camera");
-    this.camera =  node.script.first_person_camera;
+    var node = this.app.root.children[0].findByName("Camera");
+    //this.camera =  node.script.first_person_camera;
     
     this.cameraNode = node;
 
@@ -354,7 +354,7 @@ Ui.prototype.bindEvents = function() {
             
             console.log('button clicked');
             
-            this.camera.faceTo(target);
+            //this.camera.faceTo(target);
 
             // try to find object and change its material diffuse color
             // just for fun purposes
