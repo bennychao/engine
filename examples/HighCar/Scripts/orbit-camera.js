@@ -4,6 +4,8 @@ OrbitCamera.attributes.add('distanceMax', {type: 'number', default: 0, title: 'D
 OrbitCamera.attributes.add('distanceMin', {type: 'number', default: 0, title: 'Distance Min'});
 OrbitCamera.attributes.add('pitchAngleMax', {type: 'number', default: 90, title: 'Pitch Angle Max (degrees)'});
 OrbitCamera.attributes.add('pitchAngleMin', {type: 'number', default: -90, title: 'Pitch Angle Min (degrees)'});
+OrbitCamera.attributes.add('yawAngleMax', {type: 'number', default: 0, title: 'Yaw Angle Max (degrees)'});
+OrbitCamera.attributes.add('yawAngleMin', {type: 'number', default: 0, title: 'Yaw Angle Min (degrees)'});
 
 OrbitCamera.attributes.add('inertiaFactor', {
     type: 'number',
@@ -60,7 +62,7 @@ Object.defineProperty(OrbitCamera.prototype, "yaw", {
     },
 
     set: function(value) {
-        this._targetYaw = value;
+        this._targetYaw = this._clampYawAngle(value);
 
         // Ensure that the yaw takes the shortest route by making sure that 
         // the difference between the targetYaw and the actual is 180 degrees
@@ -140,6 +142,21 @@ OrbitCamera.prototype.resetAndLookAtEntity = function (resetPoint, entity) {
     this._buildAabb(entity, 0);
     this.resetAndLookAtPoint(resetPoint, this._modelsAabb.center);
 };
+
+// Set camera position to a world position and look at an entity in the scene
+// Useful if you have multiple models to swap between in a scene
+OrbitCamera.prototype.resetAndLookAtEntity = function (offsetdistance, entity) {
+    var resetPoint = entity.getPosition().clone();
+    var dir = entity.forward.clone();
+    dir.mul(new pc.Vec3(offsetdistance, offsetdistance, offsetdistance));
+    resetPoint.add(dir);
+    this.yawAngleMax = 0;
+    this.yawAngleMin = 0;
+    this._buildAabb(entity, 0);
+    
+    this.resetAndLookAtPoint(resetPoint, this._modelsAabb.center);
+};
+
 
 
 // Set the camera at a specific, yaw, pitch and distance without inertia (instant cut)
@@ -323,6 +340,14 @@ OrbitCamera.prototype._clampDistance = function (distance) {
 OrbitCamera.prototype._clampPitchAngle = function (pitch) {
     // Negative due as the pitch is inversed since the camera is orbiting the entity
     return pc.math.clamp(pitch, -this.pitchAngleMax, -this.pitchAngleMin);
+};
+
+OrbitCamera.prototype._clampYawAngle = function (yam) {
+    // Negative due as the pitch is inversed since the camera is orbiting the entity
+    if (this.yawAngleMax === 0 && this.yawAngleMin === 0)
+        return yam;
+    // 
+    return pc.math.clamp(yam, this.yawAngleMin, this.yawAngleMax);
 };
 
 
