@@ -50,16 +50,19 @@ void main(void)
     dBinormalW = vBinormalW;
     
     getTBN();
+
     
     vec3 znormal = zunpackNormal(texture2D(texture_normalMap, vUv0));
-    vec3 zdWorldName = dTBN * znormal;
+    //vec3 zdWorldName = dTBN * znormal;
     
-    vec3 zNormal = normalize(matrix_normal * zdWorldName);
+    vec3 zNormalW = normalize(matrix_normal * znormal);
+    
+        dTBN = mat3(normalize(dTangentW), normalize(dBinormalW), normalize(vNormalW));
     dViewDirW = normalize(view_position - vPositionW);
     
-
+    vec3 zdWorldName = dTBN * znormal;
      
-    vec3 eyeNormal = zNormal * 0.5 + 0.5;
+    vec3 eyeNormal = znormal * 0.5 + 0.5;
     
     vec3 cap = texture2D(uMatCapMap, eyeNormal.xy).xyz;
     
@@ -67,13 +70,13 @@ void main(void)
     vec3 ret =(0.3 + cap * (1.0 - 0.3) / (1.0 - 0.0)) * uMatColor * 2.0;
     
     //vNormalW is vertex normal 
-    float f = saturate(fresnel(dViewDirW, zNormal));   //vNormalW is vertex's normal
+    float f = saturate(fresnel(dViewDirW, zNormalW));   //vNormalW is vertex's normal
     
     ret = lerp(ret, uFresnelColor, f);
     
     //dAlbedo = uFresnelColor;//vec3(f, f, f);
     
-    dAlbedo = normalize(eyeNormal);
+    dAlbedo = (vVertexTangent);
     
     dDiffuseLight= vec3(0); //ret;//vec3(1.0, 0.0, 1.0);
     dSpecularLight=vec3(0);
