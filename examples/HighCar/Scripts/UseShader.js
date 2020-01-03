@@ -10,6 +10,11 @@ UseShader.attributes.add('fragment', {
     assetType:'shader'
 });
 
+UseShader.attributes.add('startVert', {
+    type:'asset',
+    assetType:'shader'
+}); 
+
 UseShader.attributes.add('difuse', {
     type:'asset',
     assetType:'shader'
@@ -120,12 +125,18 @@ UseShader.prototype.initialize = function() {
 
 UseShader.prototype.bindMaterial = function(curM) {
     var mychunks = {};
+    
+    mychunks.startVS =  this.startVert.resource;   
+    
     mychunks.diffusePS =  this.difuse.resource; 
     
     mychunks.startPS =  this.fragment.resource;    
 
         //"\nvoid main(void) {\n dDiffuseLight = vec3(0);\n dSpecularLight = vec3(0);\n dReflection = vec4(0);\n dSpecularity = vec3(0);\n";
     mychunks.extensionVS = "\n \n";
+    
+    
+    //mychunks.extensionVS = "\n \n";
     
     //update my chunks
     curM.chunks = mychunks;
