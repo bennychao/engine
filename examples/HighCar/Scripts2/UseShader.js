@@ -61,7 +61,7 @@ UseShader.prototype.initialize = function() {
             aNormal: pc.SEMANTIC_NORMAL,
             aUv0: pc.SEMANTIC_TEXCOORD0
         },
-        vshader: this.vertex.resource,  
+        vshader: this.vertex.resource,
         fshader: this.fragment.resource
     };
     
@@ -78,7 +78,7 @@ UseShader.prototype.initialize = function() {
     
     //material.shader = this.shader;
 //     material.setParameter('uTime', 0.3);
-//     material.setParameter('uDiffuseMap', diffuseMap);   
+//     material.setParameter('uDiffuseMap', diffuseMap);
 //     material.setParameter('uNormalMap', normalMap);
 //     material.setParameter('uCubeMap', this.cube.resource);
     
@@ -96,7 +96,7 @@ UseShader.prototype.initialize = function() {
         if (meshInstance.material.name == "Standard_20")
             cur.bindMaterial(meshInstance.material);
     });
-      
+    
 
     
     var light = this.light;

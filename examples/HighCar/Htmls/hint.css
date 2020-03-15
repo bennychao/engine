@@ -1,0 +1,105 @@
+.hint_container {
+    font-size: 16px;
+    color: #fff;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+}
+
+.hint_container .bubble_formatter {
+    width: 4.4rem;
+    margin-left: .58667rem;
+    overflow: hidden;
+}
+
+.hint_container .trigger_formatter {
+    margin-top: .53333rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.hint_container .AnchorTrigger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hint_container .AnchorTrigger .point {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.hint_container .AnchorTrigger .pulse {
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: pulseForTrigger;
+    animation-name: pulseForTrigger;
+}
+
+.hint_container .AnchorTrigger .anchor-line-hot {
+    width: 10px;
+    height: .05333rem;
+    background: #00ECEC;
+    margin-left: -.13333rem;
+    position: relative;
+    z-index: 1;
+}
+
+.hint_container .AnchorTrigger .anchor-round-hot {
+    background: rgba(0,0,0,0.5);
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #00ECEC;
+    box-shadow: 0 0.02667rem 0.13333rem 0 rgba(0,236,236,0.38);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.hint_container .AnchorTrigger .fire {
+    width: 20px;
+    height: 20px;
+    margin-right: .13333rem;
+}
+
+.hint_container .AnchorTrigger .anchor-title {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: .16rem;
+    font-size: .21333rem;
+    color: #e4e4e4;
+}
+
+.hint_container .AnchorTrigger .anchor-seen {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: .16rem;
+    font-size: .21333rem;
+    color: #e4e4e4;
+} 
+
+
+@keyframes pulseForTrigger {
+    0% {
+        transform: scale(1);
+        -webkit-transform:scale(1);
+        -moz-transform:scale(1);
+    }
+    60% {
+        transform: scale(1.2);
+        -webkit-transform:scale(1.2);
+        -moz-transform:scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform:scale(1);
+        -moz-transform:scale(1);
+    }
+}

@@ -1,0 +1,12 @@
+
+
+.cardetail_container {
+    font-size: 16px;
+    color: #fff;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+}

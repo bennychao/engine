@@ -1,0 +1,20 @@
+
+.text_container {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    
+    background-color: #2220;
+    color: #fff;
+    font-weight: 100;
+
+    pointer-events: none;
+    vertical-align:middle;
+    text-align: center;
+}
+
+
+.text_container > .text {
+    padding:5px;
+    pointer-events: none;
+}
